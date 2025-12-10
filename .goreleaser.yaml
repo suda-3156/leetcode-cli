@@ -11,6 +11,8 @@ builds:
       - linux
       - windows
       - darwin
+    ldflags:
+      - -s -w -X github.com/suda-3156/leetcode-cli/cmd.version=v{{.Version}}
 
 archives:
   - formats: [tar.gz]

@@ -33,7 +33,7 @@ Examples:
 		if len(args) < 1 {
 			return fmt.Errorf(
 				"keyword argument is required when --slug is not specified, " +
-					"because this cli is not intended to search all problems, " + 
+					"because this cli is not intended to search all problems, " +
 					"just for generating code snippet files",
 			)
 		}
