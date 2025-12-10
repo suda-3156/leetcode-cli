@@ -15,7 +15,7 @@ var (
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Show the version of leetcode-cli",
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(_ *cobra.Command, _ []string) error {
 		fmt.Printf("leetcode-cli version %s\n", version)
 		return nil
 	},
