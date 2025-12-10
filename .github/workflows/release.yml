@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     outputs:
-      should-publish: ${{ steps.release-please.outputs.release_created }}
+      should-release: ${{ steps.release-please.outputs.release_created }}
       tag: ${{ steps.release-please.outputs.tag_name }}
     steps:
       - uses: actions/create-github-app-token@v2.2.0
