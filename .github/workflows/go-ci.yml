@@ -1,0 +1,62 @@
+name: Go CI
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  files-changed:
+    uses: ./.github/workflows/files-changed.yaml
+    permissions:
+      contents: read
+      pull-requests: read
+
+  build:
+    name: Build
+    needs: files-changed
+    if: needs.files-changed.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v6.1.0
+        with:
+          go-version-file: "./go.mod"
+          cache-dependency-path: "./go.sum"
+          check-latest: true
+          cache: true
+
+      - run: go mod download
+      - run: go build ./...
+      - run: go clean -modcache
+
+  lint:
+    name: Lint
+    needs: files-changed
+    if: needs.files-changed.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v6.1.0
+        with:
+          go-version-file: "./go.mod"
+          cache-dependency-path: "./go.sum"
+          check-latest: true
+          cache: true
+
+      - run: go mod download
+      - uses: golangci/golangci-lint-action@v8
+      - run: go clean -modcache
