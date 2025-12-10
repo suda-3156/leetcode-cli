@@ -1,6 +1,7 @@
 name: Go CI
 
 on:
+  workflow_dispatch:
   push:
 
 concurrency:
@@ -14,7 +15,7 @@ permissions:
 
 jobs:
   files-changed:
-    uses: ./.github/workflows/files-changed.yaml
+    uses: ./.github/workflows/files-changed.yml
     permissions:
       contents: read
       pull-requests: read
