@@ -22,3 +22,5 @@ code-dump*.*
 # binary
 *.bin
 *.out
+# Added by goreleaser init:
+dist/
