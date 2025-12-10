@@ -14,16 +14,16 @@ permissions:
   checks: write
 
 jobs:
-  files-changed:
-    uses: ./.github/workflows/files-changed.yml
-    permissions:
-      contents: read
-      pull-requests: read
+  # files-changed:
+  #   uses: ./.github/workflows/files-changed.yml
+  #   permissions:
+  #     contents: read
+  #     pull-requests: read
 
   build:
     name: Build
-    needs: files-changed
-    if: needs.files-changed.outputs.go == 'true'
+    # needs: files-changed
+    # if: needs.files-changed.outputs.go == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -43,8 +43,8 @@ jobs:
 
   lint:
     name: Lint
-    needs: files-changed
-    if: needs.files-changed.outputs.go == 'true'
+    # needs: files-changed
+    # if: needs.files-changed.outputs.go == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
