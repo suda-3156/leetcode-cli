@@ -14,7 +14,7 @@ type questionListMsg struct {
 	err       error
 }
 
-func (m Model) fetchQuestionList() tea.Msg {
+func (m *Model) fetchQuestionList() tea.Msg {
 	resp, err := m.client.SearchQuestions(m.keyword, config.DefaultSearchLimit, 0)
 	if err != nil {
 		return questionListMsg{err: err}
@@ -22,7 +22,7 @@ func (m Model) fetchQuestionList() tea.Msg {
 	return questionListMsg{questions: resp.Data.ProblemsetPanelQuestionList.Questions}
 }
 
-func (m Model) updateQuestionList(msg tea.Msg) (Model, tea.Cmd) {
+func (m *Model) updateQuestionList(msg tea.Msg) (*Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -43,11 +43,13 @@ func (m Model) updateQuestionList(msg tea.Msg) (Model, tea.Cmd) {
 		case "q", "esc":
 			return m, tea.Quit
 		}
+	default:
+		return m, nil
 	}
 	return m, nil
 }
 
-func (m Model) viewQuestionList() string {
+func (m *Model) viewQuestionList() string {
 	var sb strings.Builder
 	sb.WriteString("Select a question:\n\n")
 

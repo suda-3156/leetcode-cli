@@ -13,7 +13,7 @@ type fileGeneratedMsg struct {
 	err  error
 }
 
-func (m Model) generateFile() tea.Msg {
+func (m *Model) generateFile() tea.Msg {
 	outputPath := generator.GetOutputPath(
 		m.presetPath,
 		m.questionDetail.QuestionFrontendID,
@@ -33,7 +33,7 @@ func (m Model) generateFile() tea.Msg {
 	return fileGeneratedMsg{path: outputPath}
 }
 
-func (m Model) updatePathInput(msg tea.Msg) (Model, tea.Cmd) {
+func (m *Model) updatePathInput(msg tea.Msg) (*Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -42,6 +42,8 @@ func (m Model) updatePathInput(msg tea.Msg) (Model, tea.Cmd) {
 		case "esc":
 			return m, tea.Quit
 		}
+	default:
+		return m, nil
 	}
 
 	var cmd tea.Cmd
@@ -49,9 +51,9 @@ func (m Model) updatePathInput(msg tea.Msg) (Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m Model) viewPathInput() string {
+func (m *Model) viewPathInput() string {
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("Output path for \"%s\" (%s):\n\n",
+	sb.WriteString(fmt.Sprintf("Output path for %q (%s):\n\n",
 		m.questionDetail.Title,
 		m.selectedLang.Lang,
 	))

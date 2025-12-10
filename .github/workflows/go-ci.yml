@@ -58,5 +58,5 @@ jobs:
           cache: true
 
       - run: go mod download
-      - uses: golangci/golangci-lint-action@v8
+      - uses: golangci/golangci-lint-action@v9
       - run: go clean -modcache

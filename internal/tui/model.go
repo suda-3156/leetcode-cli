@@ -26,7 +26,7 @@ type Model struct {
 	questionDetail *api.QuestionDetail
 	languages      []api.CodeSnippet
 	selectedLang   *api.CodeSnippet
-	outputPath     string
+	// outputPath     string
 	cursor         int
 	textInput      textinput.Model
 	err            error
@@ -60,18 +60,18 @@ func NewModel(keyword, slug, lang, path string) Model {
 	return m
 }
 
-func (m Model) GetGeneratedPath() string {
+func (m *Model) GetGeneratedPath() string {
 	return m.generatedPath
 }
 
-func (m Model) GetError() error {
+func (m *Model) GetError() error {
 	return m.err
 }
 
-func (m Model) IsDone() bool {
+func (m *Model) IsDone() bool {
 	return m.state == StateDone
 }
 
-func (m Model) HasError() bool {
+func (m *Model) HasError() bool {
 	return m.state == StateError
 }

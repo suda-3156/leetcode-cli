@@ -8,7 +8,7 @@ import (
 	"github.com/suda-3156/leetcode-cli/internal/config"
 )
 
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	// If --slug is specified, fetch question detail directly
 	if m.presetSlug != "" {
 		return m.fetchQuestionDetail
@@ -16,7 +16,8 @@ func (m Model) Init() tea.Cmd {
 	return m.fetchQuestionList
 }
 
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+//nolint:cyclop // The main update function.
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:funlen // main update function
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		// Common key handling
@@ -104,12 +105,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m.updateLanguageSelect(msg)
 	case StatePathInput:
 		return m.updatePathInput(msg)
+	default:
+		return m, nil
 	}
-
-	return m, nil
 }
 
-func (m Model) View() string {
+func (m *Model) View() string {
 	switch m.state {
 	case StateSearching:
 		if m.presetSlug != "" {
@@ -132,14 +133,14 @@ func (m Model) View() string {
 
 func Run(keyword, slug, lang, path string) (string, error) {
 	m := NewModel(keyword, slug, lang, path)
-	p := tea.NewProgram(m)
+	p := tea.NewProgram(&m)
 
 	finalModel, err := p.Run()
 	if err != nil {
 		return "", err
 	}
 
-	fm := finalModel.(Model)
+	fm := finalModel.(*Model)
 	if fm.HasError() {
 		return "", fm.GetError()
 	}

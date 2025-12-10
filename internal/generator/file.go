@@ -27,7 +27,7 @@ func GenerateFile(outputPath string, question *api.QuestionDetail, snippet *api.
 	)
 
 	// Write to file
-	if err := os.WriteFile(outputPath, []byte(content), 0644); err != nil {
+	if err := os.WriteFile(outputPath, []byte(content), 0600); err != nil {
 		return fmt.Errorf("failed to write file: %w", err)
 	}
 
@@ -35,7 +35,7 @@ func GenerateFile(outputPath string, question *api.QuestionDetail, snippet *api.
 }
 
 // GetOutputPath returns the output path based on the provided path flag and defaults.
-func GetOutputPath(pathFlag string, frontendID, titleSlug, langSlug string) string {
+func GetOutputPath(pathFlag, frontendID, titleSlug, langSlug string) string {
 	langConfig, ok := config.GetLangConfig(langSlug)
 	if !ok {
 		langConfig = config.LangConfig{Extension: ".txt"}

@@ -14,7 +14,7 @@ type questionDetailMsg struct {
 	err    error
 }
 
-func (m Model) fetchQuestionDetail() tea.Msg {
+func (m *Model) fetchQuestionDetail() tea.Msg {
 	var titleSlug string
 	if m.presetSlug != "" {
 		titleSlug = m.presetSlug
@@ -31,7 +31,7 @@ func (m Model) fetchQuestionDetail() tea.Msg {
 	return questionDetailMsg{detail: &resp.Data.Question}
 }
 
-func (m Model) updateLanguageSelect(msg tea.Msg) (Model, tea.Cmd) {
+func (m *Model) updateLanguageSelect(msg tea.Msg) (*Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -72,13 +72,15 @@ func (m Model) updateLanguageSelect(msg tea.Msg) (Model, tea.Cmd) {
 		case "q", "esc":
 			return m, tea.Quit
 		}
+	default:
+		return m, nil
 	}
 	return m, nil
 }
 
-func (m Model) viewLanguageSelect() string {
+func (m *Model) viewLanguageSelect() string {
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("Select a language for \"%s\":\n\n", m.questionDetail.Title))
+	sb.WriteString(fmt.Sprintf("Select a language for %q:\n\n", m.questionDetail.Title))
 
 	for i, lang := range m.languages {
 		cursor := "  "

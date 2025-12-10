@@ -25,17 +25,21 @@ Examples:
   leetcode-cli "reverse polish"
   leetcode-cli --slug evaluate-reverse-polish-notation
   leetcode-cli "two sum" --lang golang --path default`,
-	Args: func(cmd *cobra.Command, args []string) error {
+	Args: func(_ *cobra.Command, args []string) error {
 		// If --slug is specified, no keyword argument is needed
 		if slugFlag != "" {
 			return nil
 		}
 		if len(args) < 1 {
-			return fmt.Errorf("keyword argument is required when --slug is not specified, because this cli is not intended to search all problems, just for generating code snippet files")
+			return fmt.Errorf(
+				"keyword argument is required when --slug is not specified, " +
+					"because this cli is not intended to search all problems, " + 
+					"just for generating code snippet files",
+			)
 		}
 		return nil
 	},
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(_ *cobra.Command, args []string) error {
 		keyword := ""
 		if len(args) > 0 {
 			keyword = args[0]
