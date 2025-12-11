@@ -1,46 +1,31 @@
 package generator
 
 import (
-	"fmt"
-	"os"
-	"path/filepath"
+	"bytes"
+	"text/template"
 
-	"github.com/suda-3156/leetcode-cli/internal/api"
 	"github.com/suda-3156/leetcode-cli/internal/config"
 )
 
-func GenerateFile(outputPath string, question *api.QuestionDetail, snippet *api.CodeSnippet) error {
-	// Create directory
-	dir := filepath.Dir(outputPath)
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return fmt.Errorf("failed to create directory: %w", err)
+// GetOutputPath returns the output file path based on the configuration and frontend ID.
+func GetOutputPath(cfg *config.Config, titleSlug, frontendID, langSlug string) string {
+	tmpl, err := template.New("outputPathTemplate").Parse(cfg.OutPath)
+	if err != nil {
+		panic("failed to parse output path template: " + err.Error())
 	}
 
-	// Generate file content
-	content := GenerateFileContent(
-		config.GetCurrentDate(),
-		question.QuestionFrontendID,
-		question.Title,
-		snippet.Lang,
-		snippet.LangSlug,
-		snippet.Code,
-	)
-
-	// Write to file
-	if err := os.WriteFile(outputPath, []byte(content), 0600); err != nil {
-		return fmt.Errorf("failed to write file: %w", err)
-	}
-
-	return nil
-}
-
-// GetOutputPath returns the output path based on the provided path flag and defaults.
-func GetOutputPath(pathFlag, frontendID, titleSlug, langSlug string) string {
 	langConfig := config.GetLangConfig(langSlug)
 
-	if pathFlag == "" || pathFlag == "default" {
-		return config.GetDefaultOutputPath(frontendID, titleSlug, langConfig.Extension)
+	var buf bytes.Buffer
+	data := map[string]string{
+		"Date":       config.GetCurrentDate(cfg),
+		"FrontendID": frontendID,
+		"TitleSlug":  titleSlug,
+		"Extension":  langConfig.Extension,
 	}
 
-	return pathFlag
+	if err := tmpl.Execute(&buf, data); err != nil {
+		panic("failed to execute output path template: " + err.Error())
+	}
+	return buf.String()
 }

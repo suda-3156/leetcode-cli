@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/suda-3156/leetcode-cli/internal/api"
 	"github.com/suda-3156/leetcode-cli/internal/config"
+	"github.com/suda-3156/leetcode-cli/internal/file"
 	"github.com/suda-3156/leetcode-cli/internal/generator"
 )
 
@@ -59,7 +60,7 @@ type loadConfigMsg struct{ config *config.Config }
 
 func (m *Model) loadConfig() tea.Msg {
 	m.loading = true
-	cfg, err := config.Load()
+	cfg, err := config.ResolveConfig(m.input.ConfigPath, m.input.LangSlug, m.input.TitleSlug, m.input.OutPath, "")
 	m.loading = false
 	if err != nil {
 		return errMsg{err}
@@ -97,7 +98,7 @@ type fetchQuestionListMsg struct {
 
 func (m *Model) fetchQuestionList() tea.Msg {
 	m.loading = true
-	resp, err := m.client.SearchQuestions(m.keyword, config.DefaultSearchLimit, 0)
+	resp, err := m.client.SearchQuestions(m.input.Keyword, config.DefaultSearchLimit, 0)
 	m.loading = false
 	if err != nil {
 		return errMsg{err}
@@ -106,7 +107,7 @@ func (m *Model) fetchQuestionList() tea.Msg {
 	questions := resp.Data.ProblemsetPanelQuestionList.Questions
 
 	if len(questions) == 0 {
-		return errMsg{fmt.Errorf("no questions found for keyword: %s", m.keyword)}
+		return errMsg{fmt.Errorf("no questions found for keyword: %s", m.input.Keyword)}
 	}
 
 	return fetchQuestionListMsg{
@@ -180,8 +181,8 @@ func (m *Model) updateDecideLanguagePhase(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case questionDetailMsg:
 		m.questionDetail = msg.detail
 
-		if m.config.Language != "" {
-			langSnippet := findCodeSnippetByLang(m.questionDetail.CodeSnippets, m.config.Language)
+		if m.config.LangSlug != "" {
+			langSnippet := findCodeSnippetByLang(m.questionDetail.CodeSnippets, m.config.LangSlug)
 			if langSnippet != nil {
 				m.selectedLang = langSnippet
 				return m, m.entryDecidePathPhase()
@@ -239,13 +240,13 @@ func (m *Model) entryDecidePathPhase() tea.Cmd {
 	}
 
 	// Generate default path
-	langConfig := config.GetLangConfig(m.selectedLang.LangSlug)
-	defaultPath := config.GetDefaultOutputPath(
-		m.questionDetail.QuestionFrontendID,
+	outPash := generator.GetOutputPath(
+		m.config,
 		m.questionDetail.TitleSlug,
-		langConfig.Extension,
+		m.questionDetail.QuestionFrontendID,
+		m.selectedLang.LangSlug,
 	)
-	m.textInput.SetValue(defaultPath)
+	m.textInput.SetValue(outPash)
 	m.textInput.Focus()
 
 	return nil
@@ -283,24 +284,27 @@ type fileGeneratedMsg struct {
 }
 
 func (m *Model) generateFile() tea.Msg {
-	outputPath := generator.GetOutputPath(
-		m.config.OutPath,
-		m.questionDetail.QuestionFrontendID,
-		m.questionDetail.TitleSlug,
-		m.selectedLang.LangSlug,
-	)
-
-	// Use text input value if presetPath is not set
-	if m.config.OutPath == "" && m.textInput.Value() != "" {
-		outputPath = m.textInput.Value()
+	if m.textInput.Value() != "" {
+		m.outPath = m.textInput.Value()
 	}
 
-	err := generator.GenerateFile(outputPath, m.questionDetail, m.selectedLang)
+	date := config.GetCurrentDate(m.config)
+	frontendID := m.questionDetail.QuestionFrontendID
+	titleSlug := m.questionDetail.TitleSlug
+	content := generator.GenerateFileContent(
+		date,
+		frontendID,
+		titleSlug,
+		m.selectedLang.Lang,
+		m.selectedLang.LangSlug,
+		m.selectedLang.Code,
+	)
+	err := file.Save(m.outPath, content)
 	if err != nil {
 		return errMsg{err}
 	}
 	return fileGeneratedMsg{
-		path: outputPath,
+		path: m.outPath,
 	}
 }
 
@@ -308,7 +312,7 @@ func (m *Model) updateGenerationPhase(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case fileGeneratedMsg:
 		m.phase = DonePhase
-		m.generatedPath = msg.path
+		m.outPath = msg.path
 		return m, nil
 	default:
 		return m, nil

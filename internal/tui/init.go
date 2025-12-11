@@ -1,8 +1,9 @@
 package tui
 
 import (
+	"fmt"
+
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/suda-3156/leetcode-cli/internal/config"
 )
 
 func (m *Model) Init() tea.Cmd {
@@ -13,20 +14,19 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func Run(keyword, slug, lang, path string) (string, error) {
-	// Create config from flags
-	cfg := &config.Config{
-		Language:  lang,
+	input := Input{
+		Keyword:   keyword,
 		TitleSlug: slug,
+		LangSlug:  lang,
 		OutPath:   path,
-		Overwrite: config.OverwritePrompt,
 	}
 
-	m := New(keyword, cfg)
+	m := New(input)
 	p := tea.NewProgram(&m)
 
 	finalModel, err := p.Run()
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("run tui: %w", err)
 	}
 
 	fm := finalModel.(*Model)

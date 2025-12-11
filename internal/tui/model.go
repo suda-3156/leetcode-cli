@@ -19,6 +19,14 @@ const (
 	DonePhase
 )
 
+type Input struct {
+	ConfigPath string
+	Keyword    string
+	TitleSlug  string
+	LangSlug   string
+	OutPath    string
+}
+
 type Model struct {
 	err     error
 	spinner spinner.Model
@@ -27,7 +35,7 @@ type Model struct {
 
 	config *config.Config
 
-	keyword        string
+	input          Input
 	questions      []api.Question
 	selectedQ      *api.Question
 	questionDetail *api.QuestionDetail
@@ -36,11 +44,10 @@ type Model struct {
 	cursor         int
 	textInput      textinput.Model
 	client         *api.Client
-
-	generatedPath string
+	outPath        string
 }
 
-func New(keyword string, config *config.Config) Model {
+func New(input Input) Model {
 	ti := textinput.New()
 	ti.Placeholder = "Enter output path..."
 	ti.CharLimit = 256
@@ -55,8 +62,7 @@ func New(keyword string, config *config.Config) Model {
 		spinner:   spinner,
 		phase:     InitialPhase,
 		loading:   true,
-		config:    config,
-		keyword:   keyword,
+		input:     input,
 		textInput: ti,
 		client:    api.NewClient(),
 	}
@@ -65,7 +71,7 @@ func New(keyword string, config *config.Config) Model {
 }
 
 func (m *Model) GetGeneratedPath() string {
-	return m.generatedPath
+	return m.outPath
 }
 
 func (m *Model) GetError() error {

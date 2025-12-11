@@ -42,7 +42,7 @@ func (m *Model) viewInitialPhase() string {
 func (m *Model) viewDecideQuestionPhase() string {
 	// Still loading questions
 	if m.loading {
-		return fmt.Sprintf("%s Searching for '%s'...\n", m.spinner.View(), m.keyword)
+		return fmt.Sprintf("%s Searching for '%s'...\n", m.spinner.View(), m.input.Keyword)
 	}
 
 	var sb strings.Builder
@@ -130,5 +130,5 @@ func (m *Model) viewGenerationPhase() string {
 }
 
 func (m *Model) viewDonePhase() string {
-	return fmt.Sprintf("✓ File generated: %s\n", m.generatedPath)
+	return fmt.Sprintf("✓ File generated: %s\n", m.outPath)
 }
