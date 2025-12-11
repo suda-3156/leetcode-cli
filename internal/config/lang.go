@@ -4,6 +4,7 @@ type LangConfig struct {
 	Extension     string
 	CommentPrefix string
 	FuncDefRegex  string
+	TemplateFile  string
 }
 
 var LanguageConfigs = map[string]LangConfig{
@@ -11,28 +12,31 @@ var LanguageConfigs = map[string]LangConfig{
 		Extension:     ".go",
 		CommentPrefix: "//",
 		FuncDefRegex:  `func (\w+)\s*\(`,
+		TemplateFile:  "golang.tmpl",
 	},
-	// ```py
-	// # Definition for a binary tree node.
-	// # class TreeNode:
-	// #     def __init__(self, val=0, left=None, right=None):
-	// #         self.val = val
-	// #         self.left = left
-	// #         self.right = right
-	//
-	// class Solution:
-	//     def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-	// ```
-	// We want to capture "preorderTraversal" here.
 	"python3": {
 		Extension:     ".py",
 		CommentPrefix: "#",
-		FuncDefRegex:  `(?s)class\s+Solution:.*?def (\w+)\s*\(`,
+		// ```py
+		// # Definition for a binary tree node.
+		// # class TreeNode:
+		// #     def __init__(self, val=0, left=None, right=None):
+		// #         self.val = val
+		// #         self.left = left
+		// #         self.right = right
+		//
+		// class Solution:
+		//     def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+		// ```
+		// We want to capture "preorderTraversal" here.
+		FuncDefRegex: `(?s)class\s+Solution:.*?def (\w+)\s*\(`,
+		TemplateFile: "python.tmpl",
 	},
 	"python": {
 		Extension:     ".py",
 		CommentPrefix: "#",
 		FuncDefRegex:  `(?s)class\s+Solution:.*?def (\w+)\s*\(`,
+		TemplateFile:  "python.tmpl",
 	},
 	"javascript": {
 		Extension:     ".js",
@@ -96,6 +100,7 @@ var LanguageConfigs = map[string]LangConfig{
 //   - Extension: .txt
 //   - CommentPrefix: //
 //   - FuncDefRegex: ""
+//   - Template: "default.tmpl"
 func GetLangConfig(langSlug string) *LangConfig {
 	config, ok := LanguageConfigs[langSlug]
 	if !ok {
@@ -103,7 +108,12 @@ func GetLangConfig(langSlug string) *LangConfig {
 			Extension:     ".txt",
 			CommentPrefix: "//",
 			FuncDefRegex:  "",
+			TemplateFile:  "default.tmpl",
 		}
+	}
+
+	if config.TemplateFile == "" {
+		config.TemplateFile = "default.tmpl"
 	}
 
 	return &config

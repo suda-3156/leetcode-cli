@@ -1,0 +1,25 @@
+// {{ .Date }}
+// {{ .FrontendID }}. {{ .Title }}
+// {{ .LangName }}
+package main
+
+{{ .CodeSnippet }}
+
+func main() {
+	testCases := []struct {
+		// Define your test case structure here
+		input struct {}
+		want  string	
+	}{
+		// Add your test cases here
+	}
+
+	for _, tc := range testCases {
+		result := {{ .FuncName }}(tc.input)
+		if result != tc.want {
+			fmt.Printf("Test failed for input %v: got %v, want %v\n", tc.input, result, tc.want)
+		} else {
+			fmt.Printf("Test passed for input %v\n", tc.input)
+		}
+	}
+}

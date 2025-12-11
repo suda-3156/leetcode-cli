@@ -15,61 +15,60 @@ func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippe
 	// Decode HTML entities (e.g., &gt; -> >, &lt; -> <)
 	codeSnippet = html.UnescapeString(codeSnippet)
 
-	tmpl := NewTemplateGen(langSlug)
+	langConfig := config.GetLangConfig(langSlug)
 
-	comment := tmpl.LangConfig.CommentPrefix
+	replaceData := ReplaceData{
+		Date:        date,
+		FrontendID:  frontendID,
+		Title:       title,
+		LangName:    langName,
+		CodeSnippet: codeSnippet,
+		// Extract function name from code snippet
+		FuncName:      GetFunctionName(langConfig, codeSnippet),
+		CommentPrefix: langConfig.CommentPrefix,
+	}
 
-	header := fmt.Sprintf("%s %s\n%s %s. %s\n%s %s\n\n",
-		comment, date,
-		comment, frontendID, title,
-		comment, langName,
-	)
-
-	content, err := tmpl.Replace(header, codeSnippet)
+	content, err := Replace(langConfig, replaceData)
 	if err != nil {
-		panic("failed to generate file content: " + err.Error())
+		panic(fmt.Sprintf("failed to generate file content: %v", err))
 	}
 
 	return content
 }
 
-type TemplateGen struct {
-	LangConfig *config.LangConfig
-	Template   string
+type ReplaceData struct {
+	Date          string
+	FrontendID    string
+	Title         string
+	LangName      string
+	CodeSnippet   string
+	FuncName      string
+	CommentPrefix string
 }
 
-func NewTemplateGen(langSlug string) *TemplateGen {
-	langConfig := config.GetLangConfig(langSlug)
-
-	tmpl, ok := templateMap[langSlug]
-	if !ok {
-		tmpl = templateMap["default"]
-	}
-
-	return &TemplateGen{
-		LangConfig: langConfig,
-		Template:   tmpl,
-	}
-}
-
-func (t *TemplateGen) Replace(header, codeSnippet string) (string, error) {
-	tmpl, err := template.New("langTemplate").Parse(t.Template)
+func Replace(langConfig *config.LangConfig, data ReplaceData) (string, error) {
+	tmplContent, err := GetTemplate(langConfig.TemplateFile)
 	if err != nil {
 		return "", err
 	}
 
-	data := struct {
-		Header       string
-		CodeSnippet  string
-		FunctionName string
-	}{
-		Header:       header,
-		CodeSnippet:  codeSnippet,
-		FunctionName: t.GetFunctionName(codeSnippet),
+	tmpl, err := template.New("langTemplate").Parse(tmplContent)
+	if err != nil {
+		return "", err
+	}
+
+	dataMap := map[string]string{
+		"Date":          data.Date,
+		"FrontendID":    data.FrontendID,
+		"Title":         data.Title,
+		"LangName":      data.LangName,
+		"CodeSnippet":   data.CodeSnippet,
+		"FuncName":      data.FuncName,
+		"CommentPrefix": data.CommentPrefix,
 	}
 
 	var buf bytes.Buffer
-	if err := tmpl.Execute(&buf, data); err != nil {
+	if err := tmpl.Execute(&buf, dataMap); err != nil {
 		return "", err
 	}
 
@@ -78,8 +77,8 @@ func (t *TemplateGen) Replace(header, codeSnippet string) (string, error) {
 
 const DEFAULT_FUNC_NAME = "FUNC_NAME"
 
-func (t *TemplateGen) GetFunctionName(code string) string {
-	pattern := t.LangConfig.FuncDefRegex
+func GetFunctionName(langConfig *config.LangConfig, code string) string {
+	pattern := langConfig.FuncDefRegex
 
 	if pattern == "" {
 		return DEFAULT_FUNC_NAME

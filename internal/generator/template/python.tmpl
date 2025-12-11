@@ -1,0 +1,33 @@
+# {{ .Date }}
+# {{ .FrontendID }}. {{ .Title }}
+# {{ .LangName }}
+
+
+from typing import List, Any, TypedDict
+
+
+{{ .CodeSnippet }}
+        pass
+
+
+TestCase = TypedDict("TestCase", {"input": Any, "want": Any})
+
+
+def main():
+    test_cases: List[TestCase] = [
+        # Add your test cases here
+        {"input": {}, "want": ""}
+    ]
+
+    s = Solution()
+
+    for tc in test_cases:
+        result = s.{{ .FuncName }}(tc["input"])
+        if result != tc["want"]:
+            print(f"Test failed for input {tc["input"]}: got {result}, want {tc["want"]}")
+        else:
+            print(f"Test passed for input {tc["input"]}")
+
+
+if __name__ == "__main__":
+    main()
