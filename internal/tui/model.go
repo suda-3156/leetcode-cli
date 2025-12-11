@@ -16,7 +16,7 @@ type Model struct {
 	currentHandler phases.PhaseHandler
 }
 
-func New(input model.Input) Model {
+func New(input *model.Input) Model {
 	ti := textinput.New()
 	ti.Placeholder = "Enter output path..."
 	ti.CharLimit = 256

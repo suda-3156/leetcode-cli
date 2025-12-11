@@ -74,13 +74,23 @@ func ResolveConfig(configPath, langSlug, titleSlug, outPath, overwriteStr string
 func Load(configPath string) (*Config, error) {
 	var data string
 	var err error
-	for _, path := range CONFIG_PATH_SLICE {
-		if exists := file.FileExists(path); !exists {
-			continue
+	if configPath != "" {
+		if exists := file.FileExists(configPath); !exists {
+			return nil, fmt.Errorf("config load: config file does not exist: %s", configPath)
 		}
-		data, err = file.Read(path)
+		data, err = file.Read(configPath)
 		if err != nil {
-			return nil, fmt.Errorf("config load: failed to read config file %s: %w", path, err)
+			return nil, fmt.Errorf("config load: failed to read config file %s: %w", configPath, err)
+		}
+	} else {
+		for _, path := range CONFIG_PATH_SLICE {
+			if exists := file.FileExists(path); !exists {
+				continue
+			}
+			data, err = file.Read(path)
+			if err != nil {
+				return nil, fmt.Errorf("config load: failed to read config file %s: %w", path, err)
+			}
 		}
 	}
 

@@ -24,7 +24,7 @@ type Model struct {
 
 	Config *config.Config
 
-	Input          Input
+	Input          *Input
 	Questions      []api.Question
 	SelectedQ      *api.Question
 	QuestionDetail *api.QuestionDetail

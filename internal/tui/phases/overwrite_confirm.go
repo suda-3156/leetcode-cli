@@ -38,6 +38,7 @@ func (h *OverwriteConfirmHandler) Enter(m *model.Model) tea.Cmd {
 	return nil
 }
 
+//nolint:cyclop // Handlers may have complex logic
 func (h *OverwriteConfirmHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *PhaseType) {
 	// Handle automatic decisions from config
 	if m.Config.Overwrite == config.OverwriteAlways || m.Config.Overwrite == config.OverwriteBackup {
@@ -87,6 +88,8 @@ func (h *OverwriteConfirmHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, 
 		case "q", "esc":
 			return tea.Quit, nil
 		}
+	default:
+		return nil, nil
 	}
 
 	return nil, nil

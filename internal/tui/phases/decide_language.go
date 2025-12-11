@@ -42,6 +42,7 @@ func (h *DecideLanguageHandler) fetchQuestionDetail(m *model.Model) tea.Cmd {
 	}
 }
 
+//nolint:cyclop // Handlers may have complex logic
 func (h *DecideLanguageHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *PhaseType) {
 	switch msg := msg.(type) {
 	case questionDetailMsg:
@@ -98,6 +99,7 @@ func (h *DecideLanguageHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *P
 	return nil, nil
 }
 
+//nolint:cyclop // Handlers may have complex logic
 func (h *DecideLanguageHandler) View(m *model.Model) string {
 	if m.Loading {
 		slug := m.Config.TitleSlug

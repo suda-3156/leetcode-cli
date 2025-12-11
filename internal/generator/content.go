@@ -17,7 +17,7 @@ func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippe
 
 	langConfig := config.GetLangConfig(langSlug)
 
-	replaceData := ReplaceData{
+	replaceData := &ReplaceData{
 		Date:        date,
 		FrontendID:  frontendID,
 		Title:       title,
@@ -46,7 +46,7 @@ type ReplaceData struct {
 	CommentPrefix string
 }
 
-func Replace(langConfig *config.LangConfig, data ReplaceData) (string, error) {
+func Replace(langConfig *config.LangConfig, data *ReplaceData) (string, error) {
 	tmplContent, err := GetTemplate(langConfig.TemplateFile)
 	if err != nil {
 		return "", err

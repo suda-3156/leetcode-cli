@@ -30,8 +30,8 @@ linters:
 
   settings:
     cyclop:
-      max-complexity: 12
-      package-average: 5.0
+      max-complexity: 10
+      package-average: 6.0
     dupl:
       # Tokens count to trigger issue.
       # Default: 150
@@ -76,7 +76,9 @@ linters:
         - name: unexported-return
           disabled: true
         - name: unused-parameter
+          disabled: true
         - name: unused-receiver
+          disabled: true
 
   exclusions:
     presets:

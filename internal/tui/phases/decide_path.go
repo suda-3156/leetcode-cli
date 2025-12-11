@@ -57,6 +57,8 @@ func (h *DecidePathHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *Phase
 		case "esc":
 			return tea.Quit, nil
 		}
+	default:
+		return nil, nil
 	}
 
 	var cmd tea.Cmd

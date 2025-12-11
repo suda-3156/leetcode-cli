@@ -15,7 +15,7 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func Run(keyword, slug, lang, path string) (string, error) {
-	input := model.Input{
+	input := &model.Input{
 		Keyword:   keyword,
 		TitleSlug: slug,
 		LangSlug:  lang,

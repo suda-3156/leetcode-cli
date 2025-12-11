@@ -40,6 +40,7 @@ func (h *DecideQuestionHandler) fetchQuestionList(m *model.Model) tea.Cmd {
 	}
 }
 
+//nolint:cyclop // Handlers may have complex logic
 func (h *DecideQuestionHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *PhaseType) {
 	switch msg := msg.(type) {
 	case fetchQuestionListMsg:

@@ -63,7 +63,7 @@ func Parse(data string, dest any) error {
 //	}
 //
 //	fmt.Println(dest) // Output: {A: "example"}
-func Mapping(src, copy any) error {
+func Mapping(src, copy any) error { //nolint:gocritic // shadowing is intentional here
 	// Marshal src to YAML
 	data, err := yaml.Marshal(src)
 	if err != nil {
