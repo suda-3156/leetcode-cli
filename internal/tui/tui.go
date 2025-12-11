@@ -69,10 +69,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:funlen // ma
 			}
 
 			// Set default path
-			langConfig, ok := config.GetLangConfig(m.selectedLang.LangSlug)
-			if !ok {
-				langConfig = config.LangConfig{Extension: ".txt"}
-			}
+			langConfig := config.GetLangConfig(m.selectedLang.LangSlug)
 			defaultPath := config.GetDefaultOutputPath(
 				m.questionDetail.QuestionFrontendID,
 				m.questionDetail.TitleSlug,

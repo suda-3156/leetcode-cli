@@ -50,10 +50,7 @@ func (m *Model) updateLanguageSelect(msg tea.Msg) (*Model, tea.Cmd) {
 				m.cursor = 0
 
 				// Set default path
-				langConfig, ok := config.GetLangConfig(m.selectedLang.LangSlug)
-				if !ok {
-					langConfig = config.LangConfig{Extension: ".txt"}
-				}
+				langConfig := config.GetLangConfig(m.selectedLang.LangSlug)
 				defaultPath := config.GetDefaultOutputPath(
 					m.questionDetail.QuestionFrontendID,
 					m.questionDetail.TitleSlug,

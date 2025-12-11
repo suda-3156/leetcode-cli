@@ -36,10 +36,7 @@ func GenerateFile(outputPath string, question *api.QuestionDetail, snippet *api.
 
 // GetOutputPath returns the output path based on the provided path flag and defaults.
 func GetOutputPath(pathFlag, frontendID, titleSlug, langSlug string) string {
-	langConfig, ok := config.GetLangConfig(langSlug)
-	if !ok {
-		langConfig = config.LangConfig{Extension: ".txt"}
-	}
+	langConfig := config.GetLangConfig(langSlug)
 
 	if pathFlag == "" || pathFlag == "default" {
 		return config.GetDefaultOutputPath(frontendID, titleSlug, langConfig.Extension)
