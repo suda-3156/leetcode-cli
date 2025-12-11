@@ -2,6 +2,7 @@ package tui
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/suda-3156/leetcode-cli/internal/config"
 )
 
 func (m *Model) Init() tea.Cmd {
@@ -11,28 +12,27 @@ func (m *Model) Init() tea.Cmd {
 	)
 }
 
-// func Run(keyword, slug, lang, path string) (string, error) {
-// 	m := NewModel(keyword, slug, lang, path)
-// 	p := tea.NewProgram(&m)
+func Run(keyword, slug, lang, path string) (string, error) {
+	// Create config from flags
+	cfg := &config.Config{
+		Language:  lang,
+		TitleSlug: slug,
+		OutPath:   path,
+		Overwrite: config.OverwritePrompt,
+	}
 
-// 	finalModel, err := p.Run()
-// 	if err != nil {
-// 		return "", err
-// 	}
+	m := New(keyword, cfg)
+	p := tea.NewProgram(&m)
 
-// 	fm := finalModel.(*Model)
-// 	if fm.HasError() {
-// 		return "", fm.GetError()
-// 	}
+	finalModel, err := p.Run()
+	if err != nil {
+		return "", err
+	}
 
-// 	return fm.GetGeneratedPath(), nil
-// }
+	fm := finalModel.(*Model)
+	if fm.HasError() {
+		return "", fm.GetError()
+	}
 
-// func FormatQuestionDisplay(frontendID, title, difficulty string, paidOnly bool) string {
-// 	var sb strings.Builder
-// 	sb.WriteString(fmt.Sprintf("%s. %s (%s)", frontendID, title, strings.ToUpper(difficulty)))
-// 	if paidOnly {
-// 		sb.WriteString(" [Premium]")
-// 	}
-// 	return sb.String()
-// }
+	return fm.GetGeneratedPath(), nil
+}

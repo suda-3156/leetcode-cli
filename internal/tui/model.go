@@ -23,6 +23,7 @@ type Model struct {
 	err     error
 	spinner spinner.Model
 	phase   Phase
+	loading bool
 
 	config *config.Config
 
@@ -53,6 +54,7 @@ func New(keyword string, config *config.Config) Model {
 	m := Model{
 		spinner:   spinner,
 		phase:     InitialPhase,
+		loading:   true,
 		config:    config,
 		keyword:   keyword,
 		textInput: ti,
@@ -68,4 +70,8 @@ func (m *Model) GetGeneratedPath() string {
 
 func (m *Model) GetError() error {
 	return m.err
+}
+
+func (m *Model) HasError() bool {
+	return m.err != nil
 }

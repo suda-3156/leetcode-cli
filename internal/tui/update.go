@@ -26,7 +26,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case errMsg:
 		m.err = msg.err
-		return m, nil
+		return m, tea.Quit
 	}
 
 	switch m.phase {
@@ -41,7 +41,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case GenerationPhase:
 		return m.updateGenerationPhase(msg)
 	case DonePhase:
-		return m, nil
+		return m, tea.Quit
 	}
 	return m, nil
 }
@@ -58,7 +58,9 @@ func (m *Model) entryInitialPhase() tea.Cmd {
 type loadConfigMsg struct{ config *config.Config }
 
 func (m *Model) loadConfig() tea.Msg {
+	m.loading = true
 	cfg, err := config.Load()
+	m.loading = false
 	if err != nil {
 		return errMsg{err}
 	}
@@ -86,7 +88,6 @@ func (m *Model) entryDecideQuestionPhase() tea.Cmd {
 	if m.config.TitleSlug != "" {
 		return m.entryDecideLanguagePhase()
 	}
-
 	return m.fetchQuestionList
 }
 
@@ -95,7 +96,9 @@ type fetchQuestionListMsg struct {
 }
 
 func (m *Model) fetchQuestionList() tea.Msg {
+	m.loading = true
 	resp, err := m.client.SearchQuestions(m.keyword, config.DefaultSearchLimit, 0)
+	m.loading = false
 	if err != nil {
 		return errMsg{err}
 	}
@@ -129,6 +132,11 @@ func (m *Model) updateDecideQuestionPhase(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "enter":
 			if len(m.questions) > 0 {
+				if m.questions[m.cursor].PaidOnly {
+					return m, func() tea.Msg {
+						return errMsg{fmt.Errorf("premium-only question is not supported")}
+					}
+				}
 				m.selectedQ = &m.questions[m.cursor]
 				return m, m.entryDecideLanguagePhase()
 			}
@@ -158,7 +166,9 @@ type questionDetailMsg struct {
 func (m *Model) fetchQuestionDetail() tea.Msg {
 	titleSlug := m.selectedQ.TitleSlug
 
+	m.loading = true
 	resp, err := m.client.GetQuestionDetail(titleSlug)
+	m.loading = false
 	if err != nil {
 		return errMsg{err}
 	}
@@ -188,11 +198,11 @@ func (m *Model) updateDecideLanguagePhase(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.cursor--
 			}
 		case "down", "j":
-			if m.cursor < len(m.questions)-1 {
+			if m.cursor < len(m.languages)-1 {
 				m.cursor++
 			}
 		case "enter":
-			if len(m.questions) > 0 {
+			if len(m.languages) > 0 {
 				m.selectedLang = &m.languages[m.cursor]
 				m.cursor = 0
 				return m, m.entryDecidePathPhase()
@@ -221,10 +231,23 @@ func findCodeSnippetByLang(snippets []api.CodeSnippet, lang string) *api.CodeSni
  */
 func (m *Model) entryDecidePathPhase() tea.Cmd {
 	m.phase = DecidePathPhase
+
+	// Set default path from config or generate one
 	if m.config.OutPath != "" {
 		m.textInput.SetValue(m.config.OutPath)
 		return m.entryGenerationPhase()
 	}
+
+	// Generate default path
+	langConfig := config.GetLangConfig(m.selectedLang.LangSlug)
+	defaultPath := config.GetDefaultOutputPath(
+		m.questionDetail.QuestionFrontendID,
+		m.questionDetail.TitleSlug,
+		langConfig.Extension,
+	)
+	m.textInput.SetValue(defaultPath)
+	m.textInput.Focus()
+
 	return nil
 }
 
