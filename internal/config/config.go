@@ -1,15 +1,29 @@
 package config
 
-import "time"
+type OverwriteOption int
 
-const DefaultSearchLimit = 20
+const (
+	OverwritePrompt = iota // 0 Ask user to overwrite, bakcup, or quit
+	OverwriteAlways        // 1
+	OverwriteBackup        // 2
+	OverwriteNever         // 3
+)
 
-// GetDefaultOutputPath generates the default output path: ./YYYY-MM-DD/<frontendID>.<titleSlug><extension>
-func GetDefaultOutputPath(frontendID, titleSlug, extension string) string {
-	date := time.Now().Format("2006-01-02")
-	return "./" + date + "/" + frontendID + "." + titleSlug + extension
+type Config struct {
+	Language  string
+	TitleSlug string
+	OutPath   string
+	Overwrite OverwriteOption
 }
 
-func GetCurrentDate() string {
-	return time.Now().Format("2006-01-02")
+func Load() (*Config, error) {
+	// Implementation for loading configuration
+	// Resolve options, config file, and defaults here
+	// For now, return a default config
+	return &Config{
+		Language:  "",
+		TitleSlug: "",
+		OutPath:   "",
+		Overwrite: OverwritePrompt,
+	}, nil
 }
