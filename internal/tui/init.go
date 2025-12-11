@@ -4,17 +4,18 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/suda-3156/leetcode-cli/internal/tui/model"
 )
 
 func (m *Model) Init() tea.Cmd {
 	return tea.Batch(
-		m.spinner.Tick,
-		m.entryInitialPhase(),
+		m.Spinner.Tick,
+		m.currentHandler.Enter(&m.Model),
 	)
 }
 
 func Run(keyword, slug, lang, path string) (string, error) {
-	input := Input{
+	input := model.Input{
 		Keyword:   keyword,
 		TitleSlug: slug,
 		LangSlug:  lang,
