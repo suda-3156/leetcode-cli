@@ -7,6 +7,11 @@ import (
 	"github.com/suda-3156/leetcode-cli/internal/config"
 )
 
+// GetDefaultTemplate returns the default file path template
+func GetDefaultTemplate() string {
+	return config.FILEPATH_TMPL
+}
+
 // GetOutputPath returns the output file path based on the configuration and frontend ID.
 func GetOutputPath(cfg *config.Config, titleSlug, frontendID, langSlug string) string {
 	tmpl, err := template.New("outputPathTemplate").Parse(cfg.OutPath)

@@ -45,13 +45,9 @@ Examples:
 			keyword = args[0]
 		}
 
-		generatedPath, err := tui.Run(keyword, slugFlag, langFlag, pathFlag)
+		_, err := tui.Run(keyword, slugFlag, langFlag, pathFlag)
 		if err != nil {
 			return err
-		}
-
-		if generatedPath != "" {
-			fmt.Printf("✓ File generated: %s\n", generatedPath)
 		}
 
 		return nil
