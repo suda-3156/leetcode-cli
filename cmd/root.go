@@ -18,13 +18,14 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "leetcode-cli [keyword]",
 	Short: "Search LeetCode problems and generate code snippet files",
-	Long: `LeetCode CLI is a tool to search LeetCode problems by keyword
+	Long: `
+LeetCode CLI is a tool to search LeetCode problems by keyword
 and generate code snippet files for solving them.
 
 Examples:
   leetcode-cli "reverse polish"
   leetcode-cli --slug evaluate-reverse-polish-notation
-  leetcode-cli "two sum" --lang golang --path default`,
+  leetcode-cli "two sum" --lang golang --path path/to/file.go`,
 	Args: func(_ *cobra.Command, args []string) error {
 		// If --slug is specified, no keyword argument is needed
 		if slugFlag != "" {

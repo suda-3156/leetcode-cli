@@ -48,11 +48,11 @@ func (h *DecidePathHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *Phase
 			next := GenerationPhase
 			return nil, &next
 
-		case "h", "left":
-			// Go back to language selection
-			m.Cursor = 0
-			next := DecideLanguagePhase
-			return nil, &next
+		// case "h", "left":
+		// 	// Go back to language selection
+		// 	m.Cursor = 0
+		// 	next := DecideLanguagePhase
+		// 	return nil, &next
 
 		case "esc":
 			return tea.Quit, nil

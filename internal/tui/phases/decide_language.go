@@ -79,13 +79,13 @@ func (h *DecideLanguageHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *P
 				next := DecidePathPhase
 				return nil, &next
 			}
-		case "h", "left":
-			// Go back to question selection if we came from there
-			if m.SelectedQ != nil {
-				m.Cursor = 0
-				next := DecideQuestionPhase
-				return nil, &next
-			}
+		// case "h", "left":
+		// 	// Go back to question selection if we came from there
+		// 	if m.SelectedQ != nil {
+		// 		m.Cursor = 0
+		// 		next := DecideQuestionPhase
+		// 		return nil, &next
+		// 	}
 		case "q", "esc":
 			return tea.Quit, nil
 		}

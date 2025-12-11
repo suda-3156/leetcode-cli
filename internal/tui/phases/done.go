@@ -18,5 +18,5 @@ func (h *DoneHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *PhaseType) 
 }
 
 func (h *DoneHandler) View(m *model.Model) string {
-	return fmt.Sprintf("✓ File generated: %s\n", m.OutPath)
+	return fmt.Sprintf("\n✓ File generated: %s\n", m.OutPath)
 }
