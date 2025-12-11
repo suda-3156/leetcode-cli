@@ -3,39 +3,108 @@ package config
 type LangConfig struct {
 	Extension     string
 	CommentPrefix string
+	FuncDefRegex  string
 }
 
 var LanguageConfigs = map[string]LangConfig{
-	"golang":     {Extension: ".go", CommentPrefix: "//"},
-	"python3":    {Extension: ".py", CommentPrefix: "#"},
-	"python":     {Extension: ".py", CommentPrefix: "#"},
-	"javascript": {Extension: ".js", CommentPrefix: "//"},
-	"typescript": {Extension: ".ts", CommentPrefix: "//"},
-	"java":       {Extension: ".java", CommentPrefix: "//"},
-	"cpp":        {Extension: ".cpp", CommentPrefix: "//"},
-	"c":          {Extension: ".c", CommentPrefix: "//"},
-	"csharp":     {Extension: ".cs", CommentPrefix: "//"},
-	"rust":       {Extension: ".rs", CommentPrefix: "//"},
-	"ruby":       {Extension: ".rb", CommentPrefix: "#"},
-	"swift":      {Extension: ".swift", CommentPrefix: "//"},
-	"kotlin":     {Extension: ".kt", CommentPrefix: "//"},
-	"scala":      {Extension: ".scala", CommentPrefix: "//"},
-	"php":        {Extension: ".php", CommentPrefix: "//"},
-	"dart":       {Extension: ".dart", CommentPrefix: "//"},
-	"sql":        {Extension: ".sql", CommentPrefix: "--"},
+	"golang": {
+		Extension:     ".go",
+		CommentPrefix: "//",
+		FuncDefRegex:  `func (\w+)\s*\(`,
+	},
+	// ```py
+	// # Definition for a binary tree node.
+	// # class TreeNode:
+	// #     def __init__(self, val=0, left=None, right=None):
+	// #         self.val = val
+	// #         self.left = left
+	// #         self.right = right
+	//
+	// class Solution:
+	//     def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+	// ```
+	// We want to capture "preorderTraversal" here.
+	"python3": {
+		Extension:     ".py",
+		CommentPrefix: "#",
+		FuncDefRegex:  `(?s)class\s+Solution:.*?def (\w+)\s*\(`,
+	},
+	"python": {
+		Extension:     ".py",
+		CommentPrefix: "#",
+		FuncDefRegex:  `(?s)class\s+Solution:.*?def (\w+)\s*\(`,
+	},
+	"javascript": {
+		Extension:     ".js",
+		CommentPrefix: "//",
+	},
+	"typescript": {
+		Extension:     ".ts",
+		CommentPrefix: "//",
+	},
+	"java": {
+		Extension:     ".java",
+		CommentPrefix: "//",
+	},
+	"cpp": {
+		Extension:     ".cpp",
+		CommentPrefix: "//",
+	},
+	"c": {
+		Extension:     ".c",
+		CommentPrefix: "//",
+	},
+	"csharp": {
+		Extension:     ".cs",
+		CommentPrefix: "//",
+	},
+	"rust": {
+		Extension:     ".rs",
+		CommentPrefix: "//",
+	},
+	"ruby": {
+		Extension:     ".rb",
+		CommentPrefix: "#",
+	},
+	"swift": {
+		Extension:     ".swift",
+		CommentPrefix: "//",
+	},
+	"kotlin": {
+		Extension:     ".kt",
+		CommentPrefix: "//",
+	},
+	"scala": {
+		Extension:     ".scala",
+		CommentPrefix: "//",
+	},
+	"php": {
+		Extension:     ".php",
+		CommentPrefix: "//",
+	},
+	"dart": {
+		Extension:     ".dart",
+		CommentPrefix: "//",
+	},
+	"sql": {
+		Extension:     ".sql",
+		CommentPrefix: "--",
+	},
 }
 
 // Default values:
 //   - Extension: .txt
 //   - CommentPrefix: //
-func GetLangConfig(langSlug string) LangConfig {
+//   - FuncDefRegex: ""
+func GetLangConfig(langSlug string) *LangConfig {
 	config, ok := LanguageConfigs[langSlug]
 	if !ok {
 		config = LangConfig{
 			Extension:     ".txt",
 			CommentPrefix: "//",
+			FuncDefRegex:  "",
 		}
 	}
 
-	return config
+	return &config
 }
