@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.3.0](https://github.com/suda-3156/leetcode-cli/compare/v0.2.0...v0.3.0) (2025-12-11)
+
+
+### Features
+
+* **config:** Add configuration file support and resolution ([60269ff](https://github.com/suda-3156/leetcode-cli/commit/60269fff32aa3dfcc3367b524362c06acd379b47))
+* **generator:** Add language-specific templates for generated files ([a68bb50](https://github.com/suda-3156/leetcode-cli/commit/a68bb501f2133917dbd85518afdd2593cdd06b3b))
+* **generator:** Implement dynamic function name extraction ([27ff29e](https://github.com/suda-3156/leetcode-cli/commit/27ff29e558ea26fa374500756ad2699b403e0354))
+* **tui:** Implement full TUI flow with improved user experience ([3f04318](https://github.com/suda-3156/leetcode-cli/commit/3f04318fe01367a6a648f2eff690e12acf5aabe6))
+
+
+### Updates
+
+* **generator/template/golang:** add fmt import ([065ccfa](https://github.com/suda-3156/leetcode-cli/commit/065ccfac89bb87bf0aa79d39605875e790f658f2))
+
+
+### Bug Fixes
+
+* **template:** rename template variable Comment to CommentPrefix ([cb684ff](https://github.com/suda-3156/leetcode-cli/commit/cb684ffd28f99b29e95b4193e6024434e5eefaef))
+
 ## [0.2.0](https://github.com/suda-3156/leetcode-cli/compare/v0.1.0...v0.2.0) (2025-12-10)
 
 
