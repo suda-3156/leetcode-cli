@@ -11,20 +11,21 @@ import (
 )
 
 type OverwriteConfirmHandler struct{}
+type autoTransitionMsg struct{} // Message to trigger automatic transition
 
 func (h *OverwriteConfirmHandler) Enter(m *model.Model) tea.Cmd {
 	m.Loading = false
-	m.OverwriteChoice = 0 // Default to overwrite
+	m.OverwriteChoice = 0
 
 	// Check config for automatic decision
 	switch m.Config.Overwrite {
 	case config.OverwriteAlways:
-		m.OverwriteChoice = 0
-		return nil
+		m.OverwriteChoice = 1
+		return func() tea.Msg { return autoTransitionMsg{} }
 
 	case config.OverwriteBackup:
-		m.OverwriteChoice = 1
-		return nil
+		m.OverwriteChoice = 2
+		return func() tea.Msg { return autoTransitionMsg{} }
 
 	case config.OverwriteNever:
 		m.Err = fmt.Errorf("file already exists and overwrite is disabled: %s", m.OutPath)
@@ -40,13 +41,12 @@ func (h *OverwriteConfirmHandler) Enter(m *model.Model) tea.Cmd {
 
 //nolint:cyclop // Handlers may have complex logic
 func (h *OverwriteConfirmHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, *PhaseType) {
-	// Handle automatic decisions from config
-	if m.Config.Overwrite == config.OverwriteAlways || m.Config.Overwrite == config.OverwriteBackup {
+	switch msg := msg.(type) {
+	case autoTransitionMsg:
+		// Automatic transition triggered by Enter()
 		next := GenerationPhase
 		return nil, &next
-	}
 
-	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "up", "k":
@@ -57,32 +57,32 @@ func (h *OverwriteConfirmHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, 
 			if m.OverwriteChoice < 3 {
 				m.OverwriteChoice++
 			}
-		case "o":
-			m.OverwriteChoice = 0
-			next := GenerationPhase
-			return nil, &next
-		case "b":
-			m.OverwriteChoice = 1
-			next := GenerationPhase
-			return nil, &next
 		case "r":
-			m.OverwriteChoice = 2
+			m.OverwriteChoice = config.OverwritePrompt // Reset choice
 			m.TextInput.Focus()
 			next := DecidePathPhase
 			return nil, &next
+		case "o":
+			m.OverwriteChoice = config.OverwriteAlways
+			next := GenerationPhase
+			return nil, &next
+		case "b":
+			m.OverwriteChoice = config.OverwriteBackup
+			next := GenerationPhase
+			return nil, &next
 		case "enter":
 			switch m.OverwriteChoice {
-			case 0: // Overwrite
-				next := GenerationPhase
-				return nil, &next
-			case 1: // Backup
-				next := GenerationPhase
-				return nil, &next
-			case 2: // Return to path input
+			case config.OverwritePrompt: // Return to path input
 				m.TextInput.Focus()
 				next := DecidePathPhase
 				return nil, &next
-			case 3: // Quit
+			case config.OverwriteAlways:
+				next := GenerationPhase
+				return nil, &next
+			case config.OverwriteBackup:
+				next := GenerationPhase
+				return nil, &next
+			case config.OverwriteNever:
 				return tea.Quit, nil
 			}
 		case "q", "esc":
@@ -103,9 +103,9 @@ func (h *OverwriteConfirmHandler) View(m *model.Model) string {
 	sb.WriteString("What would you like to do?\n\n")
 
 	choices := []string{
+		"Return to path input",
 		"Overwrite the existing file",
 		"Create backup and overwrite",
-		"Return to path input",
 		"Quit",
 	}
 
@@ -113,7 +113,7 @@ func (h *OverwriteConfirmHandler) View(m *model.Model) string {
 		cursor := "  "
 		line := choice
 
-		if m.OverwriteChoice == i {
+		if m.OverwriteChoice == config.OverwriteOption(i) {
 			cursor = styles.StyleActive.Render("> ")
 			line = styles.StyleActive.Render(line)
 		}

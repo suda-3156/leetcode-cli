@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/suda-3156/leetcode-cli/internal/config"
 	"github.com/suda-3156/leetcode-cli/internal/file"
 	"github.com/suda-3156/leetcode-cli/internal/generator"
 	"github.com/suda-3156/leetcode-cli/internal/tui/model"
@@ -23,7 +24,7 @@ func (h *GenerationHandler) Enter(m *model.Model) tea.Cmd {
 func (h *GenerationHandler) generateFile(m *model.Model) tea.Cmd {
 	return func() tea.Msg {
 		// Handle backup if needed
-		if m.OverwriteChoice == 1 && file.FileExists(m.OutPath) {
+		if m.OverwriteChoice == config.OverwriteBackup && file.FileExists(m.OutPath) {
 			backupPath, err := file.CreateBackup(m.OutPath)
 			if err != nil {
 				return errMsg{err: fmt.Errorf("create backup: %w", err)}

@@ -36,7 +36,7 @@ type Model struct {
 	OutPath        string
 
 	// Overwrite decision
-	OverwriteChoice int // 0: overwrite, 1: backup, 2: return to path, 3: quit
+	OverwriteChoice config.OverwriteOption // 0: overwrite, 1: backup, 2: return to path, 3: quit
 }
 
 func (m *Model) GetGeneratedPath() string {
