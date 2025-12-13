@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/suda-3156/leetcode-cli/internal/file"
+	"github.com/suda-3156/leetcode-cli/pkg/yaml"
 )
 
 // ResolveConfig loads the configuration from the given path and overrides
@@ -101,7 +102,7 @@ func parseConfig(data string, cfg *Config) (*Config, error) {
 		Overwrite:  "prompt",
 	}
 
-	if err := file.Parse(data, cfgStr); err != nil {
+	if err := yaml.Parse(data, cfgStr); err != nil {
 		return nil, fmt.Errorf("config parse: failed to parse config data: %w", err)
 	}
 
