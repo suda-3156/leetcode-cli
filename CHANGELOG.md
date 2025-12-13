@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/suda-3156/leetcode-cli/compare/v0.2.2...v0.2.3) (2025-12-13)
+
+
+### Bug Fixes
+
+* **release:** Use brews even though it's deprecated ([38c1b63](https://github.com/suda-3156/leetcode-cli/commit/38c1b63b4ee07dcacc221d95cdbb1910c6665ce0))
+
 ## [0.2.2](https://github.com/suda-3156/leetcode-cli/compare/v0.2.1...v0.2.2) (2025-12-13)
 
 
