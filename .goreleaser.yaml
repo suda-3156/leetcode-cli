@@ -6,12 +6,13 @@ before:
 
 builds:
   - env:
-      - CGO_ENABLED=0
+      - CGO_ENABLED=1
     binary: lcli
     goos:
-      - linux
-      - windows
       - darwin
+    goarch:
+      - amd64
+      - arm64
     ldflags:
       - -s -w -X github.com/suda-3156/leetcode-cli/cmd.version=v{{.Version}}
 
