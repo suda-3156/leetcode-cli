@@ -27,6 +27,7 @@ func GetOutputPath(cfg *config.Config, titleSlug, frontendID, langSlug string) (
 		"Date":       cfg.GetCurrentDate(),
 		"FrontendID": frontendID,
 		"TitleSlug":  titleSlug,
+		"LangSlug":   langSlug,
 		"Extension":  langConfig.Extension,
 	}
 
