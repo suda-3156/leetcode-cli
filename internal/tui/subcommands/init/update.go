@@ -31,6 +31,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.quitting = true
 			return m, tea.Quit
 		}
+	default:
+		return m, nil
 	}
 	return m, nil
 }
