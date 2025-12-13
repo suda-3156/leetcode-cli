@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/suda-3156/leetcode-cli/compare/v0.2.4...v0.2.5) (2025-12-13)
+
+
+### Bug Fixes
+
+* Revert "update(release): Try to use casks" ([defdd4d](https://github.com/suda-3156/leetcode-cli/commit/defdd4ddf7505e539d88e61495c4fcb06f10a7b8))
+
 ## [0.2.4](https://github.com/suda-3156/leetcode-cli/compare/v0.2.3...v0.2.4) (2025-12-13)
 
 
