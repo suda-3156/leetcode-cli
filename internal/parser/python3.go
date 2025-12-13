@@ -76,7 +76,7 @@ func (p *python3Parser) ExtractTypeDefinition() (string, error) {
 		typeDefLines = append(typeDefLines, comment[2:])
 	}
 
-	typeDef := strings.Join(typeDefLines, "\n")
+	typeDef := "\n" + strings.Join(typeDefLines, "\n") + "\n"
 	return typeDef, nil
 }
 
