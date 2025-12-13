@@ -30,7 +30,7 @@ func (h *InitialHandler) loadConfig(m *model.Model) tea.Cmd {
 			m.Input.LangSlug,
 			m.Input.TitleSlug,
 			m.Input.OutPath,
-			"",
+			m.Input.OverwriteStr,
 		)
 		if err != nil {
 			return errMsg{err: fmt.Errorf("load config: %w", err)}

@@ -9,11 +9,12 @@ import (
 
 // Input holds the CLI flags and arguments passed to the TUI
 type Input struct {
-	ConfigPath string
-	Keyword    string
-	TitleSlug  string
-	LangSlug   string
-	OutPath    string
+	ConfigPath   string
+	Keyword      string
+	TitleSlug    string
+	LangSlug     string
+	OutPath      string
+	OverwriteStr string
 }
 
 // Model holds the state of the TUI application

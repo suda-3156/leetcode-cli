@@ -14,12 +14,13 @@ func (m *Model) Init() tea.Cmd {
 	)
 }
 
-func Run(keyword, slug, lang, path string) (string, error) {
+func Run(keyword, slug, lang, path, overwrite string) (string, error) {
 	input := &model.Input{
-		Keyword:   keyword,
-		TitleSlug: slug,
-		LangSlug:  lang,
-		OutPath:   path,
+		Keyword:      keyword,
+		TitleSlug:    slug,
+		LangSlug:     lang,
+		OutPath:      path,
+		OverwriteStr: overwrite,
 	}
 
 	m := New(input)

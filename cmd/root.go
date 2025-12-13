@@ -9,9 +9,10 @@ import (
 )
 
 var (
-	slugFlag string
-	langFlag string
-	pathFlag string
+	slugFlag      string
+	langFlag      string
+	pathFlag      string
+	overwriteFlag string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -68,4 +69,5 @@ func init() {
 	rootCmd.Flags().StringVar(&slugFlag, "slug", "", "Skip search and use titleSlug directly")
 	rootCmd.Flags().StringVarP(&langFlag, "lang", "l", "", "Specify language (langSlug: golang, python3, python, etc.)")
 	rootCmd.Flags().StringVarP(&pathFlag, "path", "p", "", "Output file path")
+	rootCmd.Flags().StringVarP(&overwriteFlag, "overwrite", "o", "", "Overwrite behavior (prompt, always, backup, never)")
 }
