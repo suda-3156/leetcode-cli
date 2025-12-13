@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/suda-3156/leetcode-cli/compare/v0.2.0...v0.2.1) (2025-12-13)
+
+
+### Bug Fixes
+
+* **release:** Set the target os to darwin ([0cf6708](https://github.com/suda-3156/leetcode-cli/commit/0cf6708ebd776b42f949422fe0bdb28229bde9c9))
+
 ## [0.2.0](https://github.com/suda-3156/leetcode-cli/compare/v0.1.0...v0.2.0) (2025-12-13)
 
 
