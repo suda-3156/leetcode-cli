@@ -25,7 +25,7 @@ func (h *DecideQuestionHandler) Enter(m *model.Model) tea.Cmd {
 
 func (h *DecideQuestionHandler) fetchQuestionList(m *model.Model) tea.Cmd {
 	return func() tea.Msg {
-		resp, err := m.Client.SearchQuestions(m.Input.Keyword, config.DefaultSearchLimit, 0)
+		resp, err := m.Client.SearchQuestions(m.Input.Keyword, config.DEFAULT_SEARCH_LIMIT, 0)
 		if err != nil {
 			return errMsg{err: fmt.Errorf("search questions: %w", err)}
 		}

@@ -24,7 +24,7 @@ func GetOutputPath(cfg *config.Config, titleSlug, frontendID, langSlug string) (
 
 	var buf bytes.Buffer
 	data := map[string]string{
-		"Date":       config.GetCurrentDate(cfg),
+		"Date":       cfg.GetCurrentDate(),
 		"FrontendID": frontendID,
 		"TitleSlug":  titleSlug,
 		"Extension":  langConfig.Extension,

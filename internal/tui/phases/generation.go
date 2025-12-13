@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/suda-3156/leetcode-cli/internal/config"
 	"github.com/suda-3156/leetcode-cli/internal/file"
 	"github.com/suda-3156/leetcode-cli/internal/generator"
 	"github.com/suda-3156/leetcode-cli/internal/tui/model"
@@ -34,7 +33,7 @@ func (h *GenerationHandler) generateFile(m *model.Model) tea.Cmd {
 		}
 
 		// Generate file content
-		date := config.GetCurrentDate(m.Config)
+		date := m.Config.GetCurrentDate()
 		content, err := generator.GenerateFileContent(
 			date,
 			m.QuestionDetail.QuestionFrontendID,
