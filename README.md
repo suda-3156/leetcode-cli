@@ -76,5 +76,4 @@ if __name__ == "__main__":
 ## TODO
 
 - [ ] Support more languages (Currently, only Python3 and Go are supported for extracting type definitions)
-- [ ] Add file overwrite option (Currently, if the file already exists, the user will be prompted whether to overwrite it)
 - [ ] Support custom templates for each language
