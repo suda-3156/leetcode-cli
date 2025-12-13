@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/suda-3156/leetcode-cli/compare/v0.2.1...v0.2.2) (2025-12-13)
+
+
+### Bug Fixes
+
+* **ci:** change release job runner to macos ([aeec436](https://github.com/suda-3156/leetcode-cli/commit/aeec436c222bfe6d4dc8dea0dbd4a06fd538b746))
+
 ## [0.2.1](https://github.com/suda-3156/leetcode-cli/compare/v0.2.0...v0.2.1) (2025-12-13)
 
 
