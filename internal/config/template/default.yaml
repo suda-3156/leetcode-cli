@@ -1,0 +1,26 @@
+# LeetCode CLI Configuration File
+# This file contains default settings for the LeetCode CLI tool
+
+# Default language for code generation (e.g., golang, python3, python)
+# Uncomment and set to skip language selection
+# lang_slug: ""
+
+# Default problem slug (if you want to always generate the same problem)
+# Uncomment and set to skip problem search
+# title_slug: ""
+
+# Output file path template
+# Available variables: {{ .Date }}, {{ .FrontendID }}, {{ .TitleSlug }}, {{ .LangSlug }}, {{ .Extension }}
+out_path: "./{{ .Date }}/{{ .FrontendID }}.{{ .TitleSlug }}{{ .Extension }}"
+
+# Date format for file paths (Go time format)
+# Reference: https://golang.org/pkg/time/#pkg-constants
+date_format: "2006-01-02"
+
+# Overwrite behavior when file already exists
+# Options: prompt (default), always, backup, never
+#   - prompt: Ask user what to do
+#   - always: Always overwrite existing files
+#   - backup: Create a backup before overwriting
+#   - never: Never overwrite, exit with error
+overwrite: "prompt"
