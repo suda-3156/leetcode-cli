@@ -152,6 +152,7 @@ func (p *python3Parser) getSolutionClassNode() *tree_sitter.Node {
 }
 
 // GenerateImportStatement generates import statements for used typing types.
+// WARNING: This function cannot detect all typing types perfectly in complex cases.
 func (p *python3Parser) GenerateImportStatement() (string, error) {
 	usedTypes := p.listTypingTypes()
 	if usedTypes.Len() == 0 {

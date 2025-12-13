@@ -27,11 +27,6 @@ func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippe
 		return "", fmt.Errorf("failed to extract type definition: %w", err)
 	}
 
-	importStmt, err := p.GenerateImportStatement()
-	if err != nil {
-		return "", fmt.Errorf("failed to generate import statement: %w", err)
-	}
-
 	funcName, err := p.ExtractSolutionFuncName()
 	if err != nil {
 		return "", fmt.Errorf("failed to extract function name: %w", err)
@@ -46,7 +41,6 @@ func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippe
 		FuncName:      funcName,
 		CommentPrefix: langConfig.CommentPrefix,
 		TypeDef:       typeDef,
-		ImportStmt:    importStmt,
 	}
 
 	content, err := Replace(langConfig, replaceData)
@@ -66,7 +60,6 @@ type ReplaceData struct {
 	FuncName      string
 	CommentPrefix string
 	TypeDef       string
-	ImportStmt    string
 }
 
 func Replace(langConfig *config.LangConfig, data *ReplaceData) (string, error) {
@@ -89,7 +82,6 @@ func Replace(langConfig *config.LangConfig, data *ReplaceData) (string, error) {
 		"FuncName":        data.FuncName,
 		"CommentPrefix":   data.CommentPrefix,
 		"TypeDefinitions": data.TypeDef,
-		"ImportStatement": data.ImportStmt,
 	}
 
 	var buf bytes.Buffer

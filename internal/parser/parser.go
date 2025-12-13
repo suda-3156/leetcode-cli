@@ -3,7 +3,9 @@ package parser
 type Parser interface {
 	ExtractTypeDefinition() (string, error)
 	ExtractSolutionFuncName() (string, error)
-	GenerateImportStatement() (string, error) // NOTE: As for now, unused; Need to resolve existing import statements
+	// NOTE: As for now, unused; Need to resolve conflict with existing imports of template code.
+	// Only pythonParser implements this method experimentally.
+	// GenerateImportStatement() (string, error)
 	Close()
 }
 
