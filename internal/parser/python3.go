@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	TYPE_DEF_START_LINE_PREFIX = "# Definition"
+	PYTHON3_TYPEDEF_START_LINE_PREFIX = "# Definition"
 )
 
 var typingTypes = set.New(
@@ -64,6 +64,22 @@ func newPython3Parser(code string) (*python3Parser, error) {
 	}, nil
 }
 
+// ExtractTypeDefinition extracts type definitions from top-level comments.
+func (p *python3Parser) ExtractTypeDefinition() (string, error) {
+	comments := p.extractTopLevelComments()
+	if len(comments) == 0 || !strings.HasPrefix(comments[0], PYTHON3_TYPEDEF_START_LINE_PREFIX) {
+		return "", nil
+	}
+
+	var typeDefLines []string
+	for _, comment := range comments[1:] {
+		typeDefLines = append(typeDefLines, comment[2:])
+	}
+
+	typeDef := strings.Join(typeDefLines, "\n")
+	return typeDef, nil
+}
+
 // extractTopLevelComments extracts comments that are direct children of the root node.
 func (p *python3Parser) extractTopLevelComments() []string {
 	if p.root == nil {
@@ -84,20 +100,78 @@ func (p *python3Parser) extractTopLevelComments() []string {
 	return comments
 }
 
-// ExtractTypeDefinition extracts type definitions from top-level comments.
-func (p *python3Parser) ExtractTypeDefinition() (string, error) {
-	comments := p.extractTopLevelComments()
-	if len(comments) == 0 || !strings.HasPrefix(comments[0], TYPE_DEF_START_LINE_PREFIX) {
+// ExtractSolutionFuncName extracts the function name defined within the Solution class.
+func (p *python3Parser) ExtractSolutionFuncName() (string, error) {
+	solutionNode := p.getSolutionClassNode()
+	if solutionNode == nil {
+		return "", fmt.Errorf("no Solution class found")
+	}
+
+	var solutionBlockNode *tree_sitter.Node
+	for i := uint(0); i < solutionNode.ChildCount(); i++ { //nolint:intrange // ChildCount returns uint32
+		child := solutionNode.Child(i)
+		if child.Kind() == "block" {
+			solutionBlockNode = child
+			break
+		}
+	}
+	if solutionBlockNode == nil {
+		return "", fmt.Errorf("no block node found in Solution class")
+	}
+
+	for i := uint(0); i < solutionBlockNode.ChildCount(); i++ { //nolint:intrange // ChildCount returns uint32
+		child := solutionBlockNode.Child(i)
+		if child.Kind() == "function_definition" {
+			for j := uint(0); j < child.ChildCount(); j++ { //nolint:intrange // ChildCount returns uint32
+				funcChild := child.Child(j)
+				if funcChild.Kind() == "identifier" {
+					return funcChild.Utf8Text(p.src), nil
+				}
+			}
+		}
+	}
+
+	return "", fmt.Errorf("no function_definition node found in Solution class")
+}
+
+// getSolutionClassNode retrieves the class_definition node which has the identifier "Solution".
+func (p *python3Parser) getSolutionClassNode() *tree_sitter.Node {
+	for i := uint(0); i < p.root.ChildCount(); i++ { //nolint:intrange // ChildCount returns uint32
+		child := p.root.Child(i)
+		if child.Kind() == "class_definition" {
+			for j := uint(0); j < child.ChildCount(); j++ { //nolint:intrange // ChildCount returns uint32
+				classChild := child.Child(j)
+				if classChild.Kind() == "identifier" && classChild.Utf8Text(p.src) == "Solution" {
+					return child
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+// GenerateImportStatement generates import statements for used typing types.
+func (p *python3Parser) GenerateImportStatement() (string, error) {
+	usedTypes := p.listTypingTypes()
+	if usedTypes.Len() == 0 {
 		return "", nil
 	}
 
-	var typeDefLines []string
-	for _, comment := range comments[1:] {
-		typeDefLines = append(typeDefLines, comment[2:])
+	var typeList []string
+	for t := range usedTypes {
+		typeList = append(typeList, t)
 	}
+	importStmt := "from typing import " + strings.Join(typeList, ", ")
+	return importStmt, nil
+}
 
-	typeDef := strings.Join(typeDefLines, "\n")
-	return typeDef, nil
+func (p *python3Parser) listTypingTypes() set.Set[string] {
+	types := set.New[string]()
+	p.extractTypeNames(p.root, p.src, &types)
+
+	result := set.Intersection(types, typingTypes)
+	return result
 }
 
 // extractTypeNames extracts type names from a type node.
@@ -136,29 +210,6 @@ func (p *python3Parser) extractTypeNames(n *tree_sitter.Node, src []byte, result
 		child := n.Child(i)
 		p.extractTypeNames(child, src, result)
 	}
-}
-
-func (p *python3Parser) listTypingTypes() set.Set[string] {
-	types := set.New[string]()
-	p.extractTypeNames(p.root, p.src, &types)
-
-	result := set.Union(types, typingTypes)
-	return result
-}
-
-// GenerateImportStatement generates import statements for used typing types.
-func (p *python3Parser) GenerateImportStatement() (string, error) {
-	usedTypes := p.listTypingTypes()
-	if usedTypes.Len() == 0 {
-		return "", nil
-	}
-
-	var typeList []string
-	for t := range usedTypes {
-		typeList = append(typeList, t)
-	}
-	importStmt := "from typing import " + strings.Join(typeList, ", ")
-	return importStmt, nil
 }
 
 // Close releases resources held by the parser.

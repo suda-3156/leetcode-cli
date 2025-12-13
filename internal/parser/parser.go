@@ -2,7 +2,7 @@ package parser
 
 type Parser interface {
 	ExtractTypeDefinition() (string, error)
-	// ExtractSolutionFuncName() (string, error) // TODO: Use parser to extract function name, not regex
+	ExtractSolutionFuncName() (string, error)
 	GenerateImportStatement() (string, error) // NOTE: As for now, unused; Need to resolve existing import statements
 	Close()
 }

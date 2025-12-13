@@ -8,6 +8,6 @@
     - [x] python3
     - [ ] go
   - ~~[ ] 必要な import はしてしまう~~
-  - [ ] solution function name のパースを tree-sitter を使ったものに移行する
+  - [x] solution function name のパースを tree-sitter を使ったものに移行する
 - [ ] config ファイルの作成 -> file genration path の指定, default language
   - [ ] header format, language specific template

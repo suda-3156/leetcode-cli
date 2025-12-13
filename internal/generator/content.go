@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"html"
-	"regexp"
-	"strings"
 	"text/template"
 
 	"github.com/suda-3156/leetcode-cli/internal/config"
@@ -34,7 +32,7 @@ func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippe
 		return "", fmt.Errorf("failed to generate import statement: %w", err)
 	}
 
-	funcName, err := GetFunctionName(langConfig, codeSnippet)
+	funcName, err := p.ExtractSolutionFuncName()
 	if err != nil {
 		return "", fmt.Errorf("failed to extract function name: %w", err)
 	}
@@ -100,27 +98,4 @@ func Replace(langConfig *config.LangConfig, data *ReplaceData) (string, error) {
 	}
 
 	return buf.String(), nil
-}
-
-const DEFAULT_FUNC_NAME = "FUNC_NAME"
-
-// GetFunctionName extracts the function name from the code snippet using the provided language configuration.
-func GetFunctionName(langConfig *config.LangConfig, code string) (string, error) {
-	pattern := langConfig.FuncDefRegex
-
-	if pattern == "" {
-		return DEFAULT_FUNC_NAME, nil
-	}
-
-	re, err := regexp.Compile(pattern)
-	if err != nil {
-		return "", fmt.Errorf("failed to compile function definition regex: %w", err)
-	}
-
-	matches := re.FindStringSubmatch(code)
-	if len(matches) >= 2 && matches[1] != "" && matches[1] != "main" {
-		return strings.TrimSpace(matches[1]), nil
-	}
-
-	return DEFAULT_FUNC_NAME, nil
 }
