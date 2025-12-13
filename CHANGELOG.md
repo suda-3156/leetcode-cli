@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/suda-3156/leetcode-cli/compare/v0.2.3...v0.2.4) (2025-12-13)
+
+
+### Updates
+
+* **release:** Try to use casks ([f69ec9a](https://github.com/suda-3156/leetcode-cli/commit/f69ec9a278466e7e78538b5be159f376aad317fb))
+
 ## [0.2.3](https://github.com/suda-3156/leetcode-cli/compare/v0.2.2...v0.2.3) (2025-12-13)
 
 
