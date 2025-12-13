@@ -47,10 +47,8 @@ Examples:
 			keyword = args[0]
 		}
 
-		_, err := tui.Run(keyword, slugFlag, langFlag, pathFlag)
-		if err != nil {
-			return err
-		}
+		// Run the TUI, errors are handled inside TUI
+		_, _ = tui.Run(keyword, slugFlag, langFlag, pathFlag, overwriteFlag)
 
 		return nil
 	},
