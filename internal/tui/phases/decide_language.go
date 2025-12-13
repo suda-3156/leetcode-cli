@@ -114,7 +114,7 @@ func (h *DecideLanguageHandler) View(m *model.Model) string {
 	// Show error if config language was invalid
 	if m.Config.LangSlug != "" && m.QuestionDetail != nil {
 		if findCodeSnippetByLang(m.QuestionDetail.CodeSnippets, m.Config.LangSlug) == nil {
-			sb.WriteString(styles.StyleErrorHeader.Render(
+			sb.WriteString(styles.StyleWarningHeader.Render(
 				fmt.Sprintf("Warning: Language '%s' not available for this question\n", m.Config.LangSlug),
 			))
 			sb.WriteString("\n")

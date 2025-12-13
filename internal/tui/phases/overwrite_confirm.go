@@ -98,7 +98,7 @@ func (h *OverwriteConfirmHandler) Update(m *model.Model, msg tea.Msg) (tea.Cmd, 
 func (h *OverwriteConfirmHandler) View(m *model.Model) string {
 	var sb strings.Builder
 
-	sb.WriteString(styles.StyleErrorHeader.Render("File already exists"))
+	sb.WriteString(styles.StyleWarningHeader.Render("File already exists"))
 	sb.WriteString(fmt.Sprintf("\n\n%s\n\n", m.OutPath))
 	sb.WriteString("What would you like to do?\n\n")
 

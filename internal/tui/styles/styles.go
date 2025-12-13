@@ -1,21 +1,17 @@
-// Source: https://github.com/koki-develop/clive/blob/main/internal/styles/styles.go
 package styles
 
 import "github.com/charmbracelet/lipgloss"
 
 var (
 	// colors
-	ColorMain = lipgloss.Color("#ff00ff")
+	ColorMain = lipgloss.Color("#2bff00ff")
 	ColorErr  = lipgloss.Color("#ff0000")
+	ColorWarn = lipgloss.Color("#ffa200")
 
 	// styles
-	StyleSpinner            = lipgloss.NewStyle().Foreground(ColorMain)
-	StyleActive             = lipgloss.NewStyle().Bold(true)
-	StyleActionHeader       = lipgloss.NewStyle().Bold(true).Padding(0, 1).Background(ColorMain)
-	StyleErrorHeader        = lipgloss.NewStyle().Bold(true).Padding(0, 1).Background(ColorErr)
-	StyleDone               = lipgloss.NewStyle().Faint(true)
-	StyleTruncated          = lipgloss.NewStyle().Faint(true)
-	StyleNotificationBorder = lipgloss.NewStyle().Foreground(ColorMain)
-	StyleNotificationText   = lipgloss.NewStyle().Bold(true)
-	StyleLink               = lipgloss.NewStyle().Underline(true)
+	StyleSpinner       = lipgloss.NewStyle().Foreground(ColorMain)
+	StyleActive        = lipgloss.NewStyle().Bold(true)
+	StyleActionHeader  = lipgloss.NewStyle().Bold(true).Padding(0, 1).Foreground(ColorMain)
+	StyleErrorHeader   = lipgloss.NewStyle().Bold(true).Padding(0, 1).Foreground(ColorErr)
+	StyleWarningHeader = lipgloss.NewStyle().Bold(true).Padding(0, 1).Foreground(ColorWarn)
 )

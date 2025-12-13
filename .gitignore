@@ -24,3 +24,7 @@ code-dump*.*
 *.out
 # Added by goreleaser init:
 dist/
+
+# leetcode cli default generation path
+# yyyy-mm-dd/
+[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
