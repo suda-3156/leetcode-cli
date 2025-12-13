@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/suda-3156/leetcode-cli/compare/v0.3.0...v0.4.0) (2025-12-13)
+
+
+### Features
+
+* **parser:** Extract solution function name using parser ([96c09dd](https://github.com/suda-3156/leetcode-cli/commit/96c09dda05db9cf8ce42dd9799a43dd7c069b001))
+* **parser:** Implement python3 parser to extract type definitions ([a9201df](https://github.com/suda-3156/leetcode-cli/commit/a9201df11225b5879d5f634ea49be1632d9b7c8e))
+
 ## [0.3.0](https://github.com/suda-3156/leetcode-cli/compare/v0.2.0...v0.3.0) (2025-12-11)
 
 
