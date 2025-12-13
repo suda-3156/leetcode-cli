@@ -15,12 +15,16 @@ func (h *DecidePathHandler) Enter(m *model.Model) tea.Cmd {
 	m.Loading = false
 
 	// Generate default path
-	outPath := generator.GetOutputPath(
+	outPath, err := generator.GetOutputPath(
 		m.Config,
 		m.QuestionDetail.TitleSlug,
 		m.QuestionDetail.QuestionFrontendID,
 		m.SelectedLang.LangSlug,
 	)
+	if err != nil {
+		m.Err = fmt.Errorf("determine output path: %w", err)
+		return tea.Quit
+	}
 
 	m.OutPath = outPath
 

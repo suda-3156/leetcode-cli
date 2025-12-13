@@ -9,31 +9,54 @@ import (
 	"text/template"
 
 	"github.com/suda-3156/leetcode-cli/internal/config"
+	"github.com/suda-3156/leetcode-cli/internal/parser"
 )
 
-func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippet string) string {
+func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippet string) (string, error) {
 	// Decode HTML entities (e.g., &gt; -> >, &lt; -> <)
 	codeSnippet = html.UnescapeString(codeSnippet)
 
 	langConfig := config.GetLangConfig(langSlug)
 
+	p, err := parser.NewParser(langSlug, codeSnippet)
+	if err != nil {
+		return "", fmt.Errorf("failed to create parser: %w", err)
+	}
+	defer p.Close()
+
+	typeDef, err := p.ExtractTypeDefinition()
+	if err != nil {
+		return "", fmt.Errorf("failed to extract type definition: %w", err)
+	}
+
+	importStmt, err := p.GenerateImportStatement()
+	if err != nil {
+		return "", fmt.Errorf("failed to generate import statement: %w", err)
+	}
+
+	funcName, err := GetFunctionName(langConfig, codeSnippet)
+	if err != nil {
+		return "", fmt.Errorf("failed to extract function name: %w", err)
+	}
+
 	replaceData := &ReplaceData{
-		Date:        date,
-		FrontendID:  frontendID,
-		Title:       title,
-		LangName:    langName,
-		CodeSnippet: codeSnippet,
-		// Extract function name from code snippet
-		FuncName:      GetFunctionName(langConfig, codeSnippet),
+		Date:          date,
+		FrontendID:    frontendID,
+		Title:         title,
+		LangName:      langName,
+		CodeSnippet:   codeSnippet,
+		FuncName:      funcName,
 		CommentPrefix: langConfig.CommentPrefix,
+		TypeDef:       typeDef,
+		ImportStmt:    importStmt,
 	}
 
 	content, err := Replace(langConfig, replaceData)
 	if err != nil {
-		panic(fmt.Sprintf("failed to generate file content: %v", err))
+		return "", fmt.Errorf("failed to replace template placeholders: %w", err)
 	}
 
-	return content
+	return content, nil
 }
 
 type ReplaceData struct {
@@ -44,6 +67,8 @@ type ReplaceData struct {
 	CodeSnippet   string
 	FuncName      string
 	CommentPrefix string
+	TypeDef       string
+	ImportStmt    string
 }
 
 func Replace(langConfig *config.LangConfig, data *ReplaceData) (string, error) {
@@ -52,19 +77,21 @@ func Replace(langConfig *config.LangConfig, data *ReplaceData) (string, error) {
 		return "", err
 	}
 
-	tmpl, err := template.New("langTemplate").Parse(tmplContent)
+	tmpl, err := template.New("langTemplate").Option("missingkey=zero").Parse(tmplContent)
 	if err != nil {
 		return "", err
 	}
 
 	dataMap := map[string]string{
-		"Date":          data.Date,
-		"FrontendID":    data.FrontendID,
-		"Title":         data.Title,
-		"LangName":      data.LangName,
-		"CodeSnippet":   data.CodeSnippet,
-		"FuncName":      data.FuncName,
-		"CommentPrefix": data.CommentPrefix,
+		"Date":            data.Date,
+		"FrontendID":      data.FrontendID,
+		"Title":           data.Title,
+		"LangName":        data.LangName,
+		"CodeSnippet":     data.CodeSnippet,
+		"FuncName":        data.FuncName,
+		"CommentPrefix":   data.CommentPrefix,
+		"TypeDefinitions": data.TypeDef,
+		"ImportStatement": data.ImportStmt,
 	}
 
 	var buf bytes.Buffer
@@ -77,22 +104,23 @@ func Replace(langConfig *config.LangConfig, data *ReplaceData) (string, error) {
 
 const DEFAULT_FUNC_NAME = "FUNC_NAME"
 
-func GetFunctionName(langConfig *config.LangConfig, code string) string {
+// GetFunctionName extracts the function name from the code snippet using the provided language configuration.
+func GetFunctionName(langConfig *config.LangConfig, code string) (string, error) {
 	pattern := langConfig.FuncDefRegex
 
 	if pattern == "" {
-		return DEFAULT_FUNC_NAME
+		return DEFAULT_FUNC_NAME, nil
 	}
 
 	re, err := regexp.Compile(pattern)
 	if err != nil {
-		panic("failed to compile regex: " + err.Error())
+		return "", fmt.Errorf("failed to compile function definition regex: %w", err)
 	}
 
 	matches := re.FindStringSubmatch(code)
 	if len(matches) >= 2 && matches[1] != "" && matches[1] != "main" {
-		return strings.TrimSpace(matches[1])
+		return strings.TrimSpace(matches[1]), nil
 	}
 
-	return DEFAULT_FUNC_NAME
+	return DEFAULT_FUNC_NAME, nil
 }

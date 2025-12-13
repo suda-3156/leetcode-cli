@@ -2,6 +2,7 @@ package generator
 
 import (
 	"bytes"
+	"fmt"
 	"text/template"
 
 	"github.com/suda-3156/leetcode-cli/internal/config"
@@ -13,10 +14,10 @@ func GetDefaultTemplate() string {
 }
 
 // GetOutputPath returns the output file path based on the configuration and frontend ID.
-func GetOutputPath(cfg *config.Config, titleSlug, frontendID, langSlug string) string {
+func GetOutputPath(cfg *config.Config, titleSlug, frontendID, langSlug string) (string, error) {
 	tmpl, err := template.New("outputPathTemplate").Parse(cfg.OutPath)
 	if err != nil {
-		panic("failed to parse output path template: " + err.Error())
+		return "", fmt.Errorf("failed to parse output path template: %w", err)
 	}
 
 	langConfig := config.GetLangConfig(langSlug)
@@ -30,7 +31,7 @@ func GetOutputPath(cfg *config.Config, titleSlug, frontendID, langSlug string) s
 	}
 
 	if err := tmpl.Execute(&buf, data); err != nil {
-		panic("failed to execute output path template: " + err.Error())
+		return "", fmt.Errorf("failed to execute output path template: %w", err)
 	}
-	return buf.String()
+	return buf.String(), nil
 }

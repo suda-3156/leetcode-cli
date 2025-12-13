@@ -2,6 +2,7 @@ package file
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"text/template"
 	"time"
@@ -12,10 +13,10 @@ const (
 	TIMESTAMP_FORMAT = "20060102150405"
 )
 
-func GetBackupPath(originalFile, timestamp string) string {
+func GetBackupPath(originalFile, timestamp string) (string, error) {
 	tmpl, err := template.New("backupTemplate").Parse(BACKUP_TMPL)
 	if err != nil {
-		panic("failed to parse backup template: " + err.Error())
+		return "", fmt.Errorf("failed to parse backup template: %w", err)
 	}
 
 	var buf bytes.Buffer
@@ -25,15 +26,18 @@ func GetBackupPath(originalFile, timestamp string) string {
 	}
 
 	if err := tmpl.Execute(&buf, data); err != nil {
-		panic("failed to execute backup template: " + err.Error())
+		return "", fmt.Errorf("failed to execute backup template: %w", err)
 	}
-	return buf.String()
+	return buf.String(), nil
 }
 
 func CreateBackup(originalFilePath string) (string, error) {
 	timestamp := time.Now().Format(TIMESTAMP_FORMAT)
 
-	backupPath := GetBackupPath(originalFilePath, timestamp)
+	backupPath, err := GetBackupPath(originalFilePath, timestamp)
+	if err != nil {
+		return "", err
+	}
 
 	input, err := os.ReadFile(originalFilePath)
 	if err != nil {

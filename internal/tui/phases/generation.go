@@ -35,7 +35,7 @@ func (h *GenerationHandler) generateFile(m *model.Model) tea.Cmd {
 
 		// Generate file content
 		date := config.GetCurrentDate(m.Config)
-		content := generator.GenerateFileContent(
+		content, err := generator.GenerateFileContent(
 			date,
 			m.QuestionDetail.QuestionFrontendID,
 			m.QuestionDetail.TitleSlug,
@@ -43,9 +43,12 @@ func (h *GenerationHandler) generateFile(m *model.Model) tea.Cmd {
 			m.SelectedLang.LangSlug,
 			m.SelectedLang.Code,
 		)
+		if err != nil {
+			return errMsg{err: fmt.Errorf("generate file content: %w", err)}
+		}
 
 		// Save file
-		err := file.Save(m.OutPath, content)
+		err = file.Save(m.OutPath, content)
 		if err != nil {
 			return errMsg{err: fmt.Errorf("save file: %w", err)}
 		}

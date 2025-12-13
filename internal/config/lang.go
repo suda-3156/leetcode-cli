@@ -30,13 +30,11 @@ var LanguageConfigs = map[string]LangConfig{
 		// ```
 		// We want to capture "preorderTraversal" here.
 		FuncDefRegex: `(?s)class\s+Solution:.*?def (\w+)\s*\(`,
-		TemplateFile: "python.tmpl",
+		TemplateFile: "python3.tmpl",
 	},
 	"python": {
 		Extension:     ".py",
 		CommentPrefix: "#",
-		FuncDefRegex:  `(?s)class\s+Solution:.*?def (\w+)\s*\(`,
-		TemplateFile:  "python.tmpl",
 	},
 	"javascript": {
 		Extension:     ".js",
