@@ -35,7 +35,7 @@ source:
 checksum:
   name_template: "{{ .Version }}_checksums.txt"
 
-homebrew_casks:
+brews:
   - name: lcli
     homepage: "https://github.com/suda-3156/leetcode-cli"
     description: "LeetCode CLI Tool to generate code files from LeetCode problems"
