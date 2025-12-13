@@ -27,7 +27,7 @@ The following file will be generated to `./yyyy-mm-dd/19.remove-nth-node-from-en
 
 ```py
 # 2025-12-13
-# 19. remove-nth-node-from-end-of-list
+# 19. Remove Nth Node From End of List
 # Python3
 
 

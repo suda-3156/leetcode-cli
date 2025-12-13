@@ -37,6 +37,7 @@ func (h *GenerationHandler) generateFile(m *model.Model) tea.Cmd {
 		content, err := generator.GenerateFileContent(
 			date,
 			m.QuestionDetail.QuestionFrontendID,
+			m.QuestionDetail.Title,
 			m.QuestionDetail.TitleSlug,
 			m.SelectedLang.Lang,
 			m.SelectedLang.LangSlug,

@@ -10,7 +10,7 @@ import (
 	"github.com/suda-3156/leetcode-cli/internal/parser"
 )
 
-func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippet string) (string, error) {
+func GenerateFileContent(date, frontendID, title, titleSlug, langName, langSlug, codeSnippet string) (string, error) {
 	// Decode HTML entities (e.g., &gt; -> >, &lt; -> <)
 	codeSnippet = html.UnescapeString(codeSnippet)
 
@@ -36,7 +36,9 @@ func GenerateFileContent(date, frontendID, title, langName, langSlug, codeSnippe
 		Date:          date,
 		FrontendID:    frontendID,
 		Title:         title,
+		TitleSlug:     titleSlug,
 		LangName:      langName,
+		LangSlug:      langSlug,
 		CodeSnippet:   codeSnippet,
 		FuncName:      funcName,
 		CommentPrefix: langConfig.CommentPrefix,
@@ -55,7 +57,9 @@ type ReplaceData struct {
 	Date          string
 	FrontendID    string
 	Title         string
+	TitleSlug     string
 	LangName      string
+	LangSlug      string
 	CodeSnippet   string
 	FuncName      string
 	CommentPrefix string
@@ -77,7 +81,9 @@ func Replace(langConfig *config.LangConfig, data *ReplaceData) (string, error) {
 		"Date":            data.Date,
 		"FrontendID":      data.FrontendID,
 		"Title":           data.Title,
+		"TitleSlug":       data.TitleSlug,
 		"LangName":        data.LangName,
+		"LangSlug":        data.LangSlug,
 		"CodeSnippet":     data.CodeSnippet,
 		"FuncName":        data.FuncName,
 		"CommentPrefix":   data.CommentPrefix,
