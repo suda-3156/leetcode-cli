@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.2.0](https://github.com/suda-3156/leetcode-cli/compare/v0.1.0...v0.2.0) (2025-12-13)
+
+
+### Features
+
+* **init:** add command to initialize config file ([e6f36aa](https://github.com/suda-3156/leetcode-cli/commit/e6f36aa1f190b190ae56f405301e14e14185c917))
+
+
+### Updates
+
+* **cli:** Add overwrite flag for file handling ([f2d7b8f](https://github.com/suda-3156/leetcode-cli/commit/f2d7b8fae5f0d5f889cf880fe932e1c14d739e80))
+* **generator:** add LangSlug to template variables ([621e7b8](https://github.com/suda-3156/leetcode-cli/commit/621e7b8bc18f10341871eaf164fa8cd56d6d9748))
+* **template:** Unpack input dict as kwargs in Python 3 tests ([a37aa40](https://github.com/suda-3156/leetcode-cli/commit/a37aa40665f644470ab28315ef9540b6be18e36c))
+
+
+### Bug Fixes
+
+* **config:** add support for date format configuration ([1e2db84](https://github.com/suda-3156/leetcode-cli/commit/1e2db840a62a6e442e6088480238de2c17a4abb6))
+* **tui:** Fix issue where the configuration file setting is ignored ([1e3900c](https://github.com/suda-3156/leetcode-cli/commit/1e3900cff6b2bf83c8878fad00765c2f7a3aec16))
+
 ## [0.1.0](https://github.com/suda-3156/leetcode-cli/compare/v0.0.1...v0.1.0) (2025-12-13)
 
 
