@@ -66,6 +66,6 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().StringVar(&slugFlag, "slug", "", "Skip search and use titleSlug directly")
-	rootCmd.Flags().StringVarP(&langFlag, "lang", "l", "", "Specify language (langSlug: golang, python3, etc.)")
-	rootCmd.Flags().StringVarP(&pathFlag, "path", "p", "", "Output file path (use 'default' for default path)")
+	rootCmd.Flags().StringVarP(&langFlag, "lang", "l", "", "Specify language (langSlug: golang, python3, python, etc.)")
+	rootCmd.Flags().StringVarP(&pathFlag, "path", "p", "", "Output file path")
 }
