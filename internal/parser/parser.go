@@ -13,8 +13,8 @@ func NewParser(langSlug, codeSnippet string) (Parser, error) {
 	switch langSlug {
 	case "python3":
 		return newPython3Parser(codeSnippet)
-	// case "go":
-	// 	return newGoParser()
+	case "golang":
+		return newGoParser(codeSnippet)
 	default:
 		return newDefaultParser()
 	}
