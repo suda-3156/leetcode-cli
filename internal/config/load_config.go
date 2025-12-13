@@ -109,6 +109,7 @@ func parseConfig(data string, cfg *Config) (*Config, error) {
 	cfg.LangSlug = cfgStr.LangSlug
 	cfg.TitleSlug = cfgStr.TitleSlug
 	cfg.OutPath = cfgStr.OutPath
+	cfg.DateFormat = cfgStr.DateFormat
 
 	switch strings.ToLower(cfgStr.Overwrite) {
 	case "always", "force", "true":
