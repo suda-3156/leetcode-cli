@@ -7,6 +7,12 @@ This is because you can easily submit solutions and search for problems on the L
 
 Currently, only Python3 and Go are supported for extracting type definitions.
 
+## TODO
+
+- [ ] Support more languages (Currently, only Python3 and Go are supported for extracting type definitions)
+- [ ] Support custom templates for each language
+- [ ] Unuse tree-sitter for parsing because it's heavy and makes building workflows with GitHub Actions difficult.
+
 ## Usage
 
 ```bash
@@ -14,6 +20,20 @@ lcli generate <keyword>
 ```
 
 - `<keyword>`: The keyword to search for the problem (e.g., problem title or ID).
+
+## Installation
+
+Requires Go 1.25.4 or higher:
+
+```bash
+go install github.com/suda-3156/leetcode-cli@latest # With binary name `leetcode-cli`
+```
+
+Or only for macOS:
+
+```bash
+brew install suda-3156/tap/lcli # With binary name `lcli`
+```
 
 ## Example
 
@@ -72,8 +92,3 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-
-## TODO
-
-- [ ] Support more languages (Currently, only Python3 and Go are supported for extracting type definitions)
-- [ ] Support custom templates for each language
