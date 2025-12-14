@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.6](https://github.com/suda-3156/leetcode-cli/compare/v0.2.5...v0.2.6) (2025-12-14)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/tree-sitter/tree-sitter-go to v0.25.0 ([#17](https://github.com/suda-3156/leetcode-cli/issues/17)) ([9f0dc33](https://github.com/suda-3156/leetcode-cli/commit/9f0dc33fe4a9ef59882a540328715a84bdea79f9))
+* **deps:** update module github.com/tree-sitter/tree-sitter-python to v0.25.0 ([#19](https://github.com/suda-3156/leetcode-cli/issues/19)) ([b4611b5](https://github.com/suda-3156/leetcode-cli/commit/b4611b57c092c57b4172b9a38abdcdf7ebe66a3d))
+
 ## [0.2.5](https://github.com/suda-3156/leetcode-cli/compare/v0.2.4...v0.2.5) (2025-12-13)
 
 
