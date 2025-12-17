@@ -11,7 +11,6 @@ Currently, only Python3 and Go are supported for extracting type definitions.
 
 - [ ] Support more languages (Currently, only Python3 and Go are supported for extracting type definitions)
 - [ ] Support custom templates for each language
-- [ ] Unuse tree-sitter for parsing because it's heavy and makes building workflows with GitHub Actions difficult.
 
 ## Usage
 
@@ -27,12 +26,6 @@ Requires Go 1.25.4 or higher:
 
 ```bash
 go install github.com/suda-3156/leetcode-cli@latest # With binary name `leetcode-cli`
-```
-
-Or only for macOS:
-
-```bash
-brew install suda-3156/tap/lcli # With binary name `lcli`
 ```
 
 ## Example
