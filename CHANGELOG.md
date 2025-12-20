@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.7](https://github.com/suda-3156/leetcode-cli/compare/v0.2.6...v0.2.7) (2025-12-20)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/goccy/go-yaml to v1.19.1 ([#20](https://github.com/suda-3156/leetcode-cli/issues/20)) ([04a6674](https://github.com/suda-3156/leetcode-cli/commit/04a6674df79c9b87de863e54048a673028bd5ba1))
+
 ## [0.2.6](https://github.com/suda-3156/leetcode-cli/compare/v0.2.5...v0.2.6) (2025-12-14)
 
 
